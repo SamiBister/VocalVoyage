@@ -74,6 +74,8 @@ VocabVoyage/
 
    The backend server will start at `http://localhost:8000`.
 
+   The backend server swaggers documentation is at `http://localhost:8000/docs`.
+
 ### Frontend Setup
 
 1. **Navigate to Frontend Directory**
