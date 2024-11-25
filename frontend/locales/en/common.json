@@ -1,0 +1,21 @@
+{
+  "welcome": "Welcome to VocabVoyage",
+  "start_quiz": "Start Quiz",
+  "submit_answer": "Submit Answer",
+  "end_quiz": "End Quiz",
+  "quiz_statistics": "Quiz Statistics",
+  "incorrect_words": "Incorrectly Answered Terms",
+  "translate": "Translate",
+  "correct": "Correct",
+  "incorrect": "Incorrect",
+  "incorrect_write_term_three_times": "Incorrect! Please write \"{{term}}\" three times.",
+  "select_mode": "Select Mode",
+  "normal_mode": "Normal Mode",
+  "infinite_mode": "Infinite Mode",
+  "please_write_term_three_times": "Please write \"{{term}}\" ({{count}}/3):",
+  "correct_term": "Correct Term",
+  "good_job_moving_on": "Good job! Let's move on to the next word.",
+  "great_keep_writing": "Great! Keep writing.",
+  "incorrect_spelling": "Incorrect spelling! Please write \"{{term}}\" again.",
+  "select_language": "Select Language"
+}

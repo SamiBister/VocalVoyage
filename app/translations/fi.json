@@ -1,0 +1,17 @@
+{
+  "welcome": "Tervetuloa VocabVoyageen",
+  "start_quiz": "Aloita tietovisa",
+  "submit_answer": "Lähetä vastaus",
+  "end_quiz": "Lopeta tietovisa",
+  "quiz_statistics": "Tietovisan tilastot",
+  "incorrect_words": "Väärin vastatut termit",
+  "translate": "Käännä",
+  "correct": "Oikein",
+  "incorrect": "Väärin",
+  "incorrect_answer": "Väärin! Oikea termi on",
+  "write_three_times": "Ole hyvä ja kirjoita se kolme kertaa.",
+  "select_mode": "Valitse tila",
+  "normal_mode": "Normaali tila",
+  "infinite_mode": "Loputon tila",
+  "write_count": "Kirjoita oikea termi ({count}/3):"
+}

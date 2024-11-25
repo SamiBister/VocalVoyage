@@ -1,0 +1,30 @@
+[project]
+name = "vocabvoyage"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115.5",
+    "pydantic>=2.10.1",
+    "python-multipart>=0.0.17",
+    "uvicorn>=0.32.1",
+]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.uv]
+dev-dependencies = [
+    "build>=1.2.2.post1",
+    "pyright>=1.1.389",
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.3",
+    "ruff>=0.8.0",
+]

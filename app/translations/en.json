@@ -1,0 +1,17 @@
+{
+  "welcome": "Welcome to VocabVoyage",
+  "start_quiz": "Start Quiz",
+  "submit_answer": "Submit Answer",
+  "end_quiz": "End Quiz",
+  "quiz_statistics": "Quiz Statistics",
+  "incorrect_words": "Incorrectly Answered Terms",
+  "translate": "Translate",
+  "correct": "Correct",
+  "incorrect": "Incorrect",
+  "incorrect_answer": "Incorrect! The correct term is",
+  "write_three_times": "Please write it three times.",
+  "select_mode": "Select Mode",
+  "normal_mode": "Normal Mode",
+  "infinite_mode": "Infinite Mode",
+  "write_count": "Write the correct term ({count}/3):"
+}
