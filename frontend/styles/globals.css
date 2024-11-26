@@ -1,0 +1,15 @@
+/* frontend/styles/globals.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Comic Neue", cursive;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff6f61; /* A playful color */
+}
+
+/* Add other global styles as needed */

@@ -1,7 +1,11 @@
-import { useState } from "react";
+// frontend/pages/index.js
+
+import { useState, useEffect, useRef } from "react";
 import useTranslation from "next-translate/useTranslation";
 import setLanguage from "next-translate/setLanguage";
 import axios from "axios";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const { t, lang } = useTranslation("common");
@@ -12,13 +16,22 @@ export default function Home() {
     incorrect: 0,
     incorrect_words: [],
   });
-  const [mode, setMode] = useState("normal");
+  const [mode] = useState("infinite"); // Always use infinite mode
   const [writeCount, setWriteCount] = useState(0);
   const [language, setUILanguage] = useState(lang);
   const [message, setMessage] = useState("");
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [currentWord, writeCount]);
 
   const startQuiz = async () => {
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/set_mode/`, { mode });
+    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/set_mode/`, {
+      mode,
+    });
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/start_quiz/`);
     fetchNextWord();
   };
@@ -37,7 +50,7 @@ export default function Home() {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/words/next`,
       );
-      if (response.data) {
+      if (response.data !== null) {
         setCurrentWord(response.data);
         setUserInput("");
         setWriteCount(0);
@@ -102,6 +115,16 @@ export default function Home() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (writeCount > 0 && writeCount <= 3) {
+        handleRepeatIncorrect();
+      } else {
+        submitAnswer();
+      }
+    }
+  };
+
   const changeLanguage = async (e) => {
     const newLang = e.target.value;
     setUILanguage(newLang);
@@ -109,13 +132,30 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <h1>{t("welcome")}</h1>
+    <div className={styles.container}>
+      <Head>
+        <title>VocabVoyage</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="true"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <h1 className={styles.heading}>{t("welcome")}</h1>
 
       {/* Language Selection Dropdown */}
-      <label>
+      <label className={styles.label}>
         {t("select_language")}:
-        <select value={language} onChange={changeLanguage}>
+        <select
+          className={styles.select}
+          value={language}
+          onChange={changeLanguage}
+        >
           <option value="en">English</option>
           <option value="fi">Suomi</option>
           {/* Add more languages as needed */}
@@ -124,18 +164,13 @@ export default function Home() {
 
       {!currentWord ? (
         <div>
-          <label>
-            {t("select_mode")}:
-            <select value={mode} onChange={(e) => setMode(e.target.value)}>
-              <option value="normal">{t("normal_mode")}</option>
-              <option value="infinite">{t("infinite_mode")}</option>
-            </select>
-          </label>
-          <button onClick={startQuiz}>{t("start_quiz")}</button>
+          <button className={styles.button} onClick={startQuiz}>
+            {t("start_quiz")}
+          </button>
         </div>
       ) : (
         <div>
-          {message && <p>{message}</p>}
+          {message && <p className={styles.message}>{message}</p>}
           {writeCount > 0 && writeCount <= 3 ? (
             <div>
               <p>
@@ -146,11 +181,14 @@ export default function Home() {
               </p>
               <input
                 type="text"
+                className={styles.textInput}
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder={currentWord.foreign_term}
+                ref={inputRef}
               />
-              <button onClick={handleRepeatIncorrect}>
+              <button className={styles.button} onClick={handleRepeatIncorrect}>
                 {t("submit_answer")}
               </button>
             </div>
@@ -159,11 +197,18 @@ export default function Home() {
               <p>{`${t("translate")}: ${currentWord.native_translation}`}</p>
               <input
                 type="text"
+                className={styles.textInput}
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                ref={inputRef}
               />
-              <button onClick={submitAnswer}>{t("submit_answer")}</button>
-              <button onClick={endQuiz}>{t("end_quiz")}</button>
+              <button className={styles.button} onClick={submitAnswer}>
+                {t("submit_answer")}
+              </button>
+              <button className={styles.button} onClick={endQuiz}>
+                {t("end_quiz")}
+              </button>
             </div>
           )}
         </div>

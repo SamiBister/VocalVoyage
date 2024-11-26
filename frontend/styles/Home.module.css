@@ -1,0 +1,52 @@
+/* frontend/styles/Home.module.css */
+
+.container {
+  font-family: "Comic Neue", cursive;
+  font-size: 18px;
+  color: #333;
+  padding: 20px;
+}
+
+.heading {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff6f61; /* A playful color */
+}
+
+.button {
+  font-family: "Comic Neue", cursive;
+  font-size: 18px;
+  padding: 10px 20px;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #ffdb4d;
+}
+
+.textInput {
+  font-family: "Comic Neue", cursive;
+  font-size: 18px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.label {
+  font-size: 18px;
+}
+
+.select {
+  font-size: 18px;
+  padding: 5px;
+}
+
+.message {
+  font-size: 16px;
+  color: #0070f3;
+}
