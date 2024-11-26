@@ -4,8 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import useTranslation from "next-translate/useTranslation";
 import setLanguage from "next-translate/setLanguage";
 import axios from "axios";
-import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import Head from "next/head";
+import Image from "next/image";
 
 export default function Home() {
   const { t, lang } = useTranslation("common");
@@ -135,6 +136,21 @@ export default function Home() {
     <div className={styles.container}>
       <Head>
         <title>VocabVoyage</title>
+        {/* Existing links and meta tags */}
+        <link rel="icon" href="http://localhost:3000/favicon.ico" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -146,7 +162,16 @@ export default function Home() {
           rel="stylesheet"
         />
       </Head>
-      <h1 className={styles.heading}>{t("welcome")}</h1>
+      <div className={styles.header}>
+        <Image
+          src="/icon.webp" // The path to your image in the public folder
+          alt="Logo"
+          width={300} // Adjust the width and height as needed
+          height={300}
+          className={styles.logo}
+        />
+        <h1 className={styles.heading}>{t("welcome")}</h1>
+      </div>
 
       {/* Language Selection Dropdown */}
       <label className={styles.label}>

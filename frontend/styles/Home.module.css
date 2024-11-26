@@ -7,6 +7,16 @@
   padding: 20px;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  margin-right: 20px;
+}
+
 .heading {
   font-size: 36px;
   font-weight: bold;
