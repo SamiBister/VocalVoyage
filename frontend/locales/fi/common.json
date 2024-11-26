@@ -23,5 +23,12 @@
   "upload_files": "Lataa tiedostot",
   "no_files_selected": "Ei tiedostoja valittu.",
   "file_upload_error": "Virhe tiedostojen lataamisessa. Yritä uudelleen.",
-  "choose_files": "Valitse tiedostot"
+  "choose_files": "Valitse tiedostot",
+  "score": "Pisteet",
+  "result_very_low": "Jatka yrittämistä, kunnes osaat sanat oikein.",
+  "result_low": "Ei huono, mutta tarvitset vielä harjoitusta.",
+  "result_medium": "Ihan ok tulos, mutta tarvitset lisää harjoitusta.",
+  "result_high": "Hyvä tulos! Voit saavuttaa vielä enemmän.",
+  "result_very_high": "Erittäin hyvä, lähes täydellinen!",
+  "result_perfect": "Läpäisit kokeen huippupistein! Voit olla varma osaamisestasi."
 }

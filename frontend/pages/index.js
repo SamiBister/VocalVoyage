@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import useTranslation from "next-translate/useTranslation";
 import setLanguage from "next-translate/setLanguage";
 import axios from "axios";
-import styles from "../styles/Home.module.css";
 import Head from "next/head";
 import Image from "next/image";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const { t, lang } = useTranslation("common");
@@ -22,6 +22,7 @@ export default function Home() {
   const [language, setUILanguage] = useState(lang);
   const [message, setMessage] = useState("");
   const inputRef = useRef(null);
+
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadMessage, setUploadMessage] = useState("");
 
@@ -168,25 +169,43 @@ export default function Home() {
     }
   };
 
+  // Calculate the percentage of correct answers
+  const totalAnswers = stats.correct + stats.incorrect;
+  const correctPercentage =
+    totalAnswers > 0 ? (stats.correct / totalAnswers) * 100 : 0;
+
+  // Determine the result image and message based on the percentage
+  let resultImage = "";
+  let resultMessage = "";
+
+  if (totalAnswers > 0 && !currentWord) {
+    if (correctPercentage === 100) {
+      resultImage = "/perfect.webp";
+      resultMessage = t("result_perfect");
+    } else if (correctPercentage >= 80) {
+      resultImage = "/very_high.webp";
+      resultMessage = t("result_very_high");
+    } else if (correctPercentage >= 60) {
+      resultImage = "/high.webp";
+      resultMessage = t("result_high");
+    } else if (correctPercentage >= 40) {
+      resultImage = "/medium.webp";
+      resultMessage = t("result_medium");
+    } else if (correctPercentage >= 20) {
+      resultImage = "/low.webp";
+      resultMessage = t("result_low");
+    } else {
+      resultImage = "/very_low.webp";
+      resultMessage = t("result_very_low");
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
         <title>VocabVoyage</title>
+        <link rel="icon" href="/favicon.ico" />
         {/* Existing links and meta tags */}
-        <link rel="icon" href="http://localhost:3000/favicon.ico" />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -198,12 +217,13 @@ export default function Home() {
           rel="stylesheet"
         />
       </Head>
+
       <div className={styles.header}>
         <Image
-          src="/icon.webp" // The path to your image in the public folder
+          src="/logo.webp" // The path to your image in the public folder
           alt="Logo"
-          width={300} // Adjust the width and height as needed
-          height={300}
+          width={100} // Adjust the width and height as needed
+          height={100}
           className={styles.logo}
         />
         <h1 className={styles.heading}>{t("welcome")}</h1>
@@ -223,13 +243,43 @@ export default function Home() {
         </select>
       </label>
 
-      {!currentWord ? (
+      {/* File Upload Section */}
+      <div className={styles.uploadSection}>
+        <h2 className={styles.subheading}>{t("upload_word_files")}</h2>
+        <div className={styles.fileUpload}>
+          <label htmlFor="file-upload" className={styles.fileUploadLabel}>
+            {t("choose_files")}
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            accept=".csv"
+            multiple
+            onChange={handleFileChange}
+            className={styles.fileInput}
+            ref={fileInputRef}
+          />
+          <span className={styles.fileName}>
+            {selectedFiles.length > 0
+              ? Array.from(selectedFiles)
+                  .map((file) => file.name)
+                  .join(", ")
+              : t("no_file_chosen")}
+          </span>
+        </div>
+        <button className={styles.button} onClick={uploadWordFiles}>
+          {t("upload_files")}
+        </button>
+        {uploadMessage && <p className={styles.message}>{uploadMessage}</p>}
+      </div>
+
+      {!currentWord && totalAnswers === 0 ? (
         <div>
           <button className={styles.button} onClick={startQuiz}>
             {t("start_quiz")}
           </button>
         </div>
-      ) : (
+      ) : currentWord ? (
         <div>
           {message && <p className={styles.message}>{message}</p>}
           {writeCount > 0 && writeCount <= 3 ? (
@@ -273,49 +323,39 @@ export default function Home() {
             </div>
           )}
         </div>
-      )}
-      {stats.correct + stats.incorrect > 0 && (
-        <div>
+      ) : totalAnswers > 0 && !currentWord ? (
+        <div className={styles.resultSection}>
           <h2>{t("quiz_statistics")}</h2>
           <p>{`${t("correct")}: ${stats.correct}`}</p>
           <p>{`${t("incorrect")}: ${stats.incorrect}`}</p>
-          <h3>{t("incorrect_words")}</h3>
-          <ul>
-            {stats.incorrect_words.map((word, index) => (
-              <li key={index}>{word}</li>
-            ))}
-          </ul>
+          <p>{`${t("score")}: ${correctPercentage.toFixed(2)}%`}</p>
+          {resultImage && (
+            <Image
+              src={resultImage}
+              alt="Result Image"
+              width={200}
+              height={200}
+              className={styles.resultImage}
+            />
+          )}
+          {resultMessage && (
+            <p className={styles.resultMessage}>{resultMessage}</p>
+          )}
+          {stats.incorrect_words.length > 0 && (
+            <>
+              <h3>{t("incorrect_words")}</h3>
+              <ul>
+                {stats.incorrect_words.map((word, index) => (
+                  <li key={index}>{word}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          <button className={styles.button} onClick={startQuiz}>
+            {t("start_new_quiz")}
+          </button>
         </div>
-      )}
-      {/* File Upload Section */}
-      <div className={styles.uploadSection}>
-        <h2 className={styles.subheading}>{t("upload_word_files")}</h2>
-        <div className={styles.fileUpload}>
-          <label htmlFor="file-upload" className={styles.fileUploadLabel}>
-            {t("choose_files")}
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            accept=".csv"
-            multiple
-            onChange={handleFileChange}
-            className={styles.fileInput}
-            ref={fileInputRef}
-          />
-          <span className={styles.fileName}>
-            {selectedFiles.length > 0
-              ? Array.from(selectedFiles)
-                  .map((file) => file.name)
-                  .join(", ")
-              : t("no_file_chosen")}
-          </span>
-        </div>
-        <button className={styles.button} onClick={uploadWordFiles}>
-          {t("upload_files")}
-        </button>
-        {uploadMessage && <p className={styles.message}>{uploadMessage}</p>}
-      </div>
+      ) : null}
     </div>
   );
 }

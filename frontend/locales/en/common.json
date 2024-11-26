@@ -22,5 +22,12 @@
   "upload_files": "Upload Files",
   "no_files_selected": "No files selected.",
   "file_upload_error": "Error uploading files. Please try again.",
-  "choose_files": "Choose Files"
+  "choose_files": "Choose Files",
+  "score": "Score",
+  "result_very_low": "Keep trying until you get the words right.",
+  "result_low": "Not bad, but you still need more practice.",
+  "result_medium": "This is an okay result, but you need more practice.",
+  "result_high": "Good result! You can reach higher.",
+  "result_very_high": "Very good, so close to perfect!",
+  "result_perfect": "You aced this exam! You can be confident about your knowledge."
 }
