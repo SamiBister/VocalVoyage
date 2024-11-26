@@ -18,5 +18,10 @@
   "correct_term": "Oikea termi",
   "good_job_moving_on": "Hyvää työtä! Siirrytään seuraavaan sanaan.",
   "incorrect_spelling": "Väärä kirjoitusasu! Ole hyvä ja kirjoita \"{{term}}\" uudelleen.",
-  "select_language": "Valitse kieli"
+  "select_language": "Valitse kieli",
+  "upload_word_files": "Lataa uusia sanastotiedostoja",
+  "upload_files": "Lataa tiedostot",
+  "no_files_selected": "Ei tiedostoja valittu.",
+  "file_upload_error": "Virhe tiedostojen lataamisessa. Yritä uudelleen.",
+  "choose_files": "Valitse tiedostot"
 }

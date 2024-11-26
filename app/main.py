@@ -1,12 +1,14 @@
 # app/main.py
 
-from typing import Optional
+from typing import Optional, List
+import os
+import shutil
 
-from app.domain.models import Word
+from app.domain.models import Word, QuizMode
 from app.interfaces.logger import QuizLogger
 from app.interfaces.repositories import WordRepository
 from app.use_cases.word_service import WordService
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -97,3 +99,32 @@ async def get_results():
         "incorrect": word_service.incorrect,
         "incorrect_words": word_service.incorrect_words,
     }
+
+
+@app.post("/upload_words/")
+async def upload_words(files: List[UploadFile] = File(...)):
+    """
+    Endpoint to upload new word files.
+    """
+    data_directory = "app/data"
+    # Clear existing files in the data directory
+    for filename in os.listdir(data_directory):
+        file_path = os.path.join(data_directory, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+    # Save the uploaded files
+    for file in files:
+        # Ensure the uploaded file is a .csv file
+        if not file.filename.endswith(".csv"):
+            raise HTTPException(status_code=400, detail="Only .csv files are allowed")
+        file_location = os.path.join(data_directory, file.filename)
+        with open(file_location, "wb+") as file_object:
+            shutil.copyfileobj(file.file, file_object)
+
+    # Reload the words from the new files
+    word_repo = WordRepository()
+    words = word_repo.load_words()
+    word_service.update_words(words)
+
+    return {"message": "Word files uploaded and word list updated"}

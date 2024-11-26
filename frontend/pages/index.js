@@ -22,6 +22,8 @@ export default function Home() {
   const [language, setUILanguage] = useState(lang);
   const [message, setMessage] = useState("");
   const inputRef = useRef(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [uploadMessage, setUploadMessage] = useState("");
 
   useEffect(() => {
     if (inputRef.current) {
@@ -130,6 +132,40 @@ export default function Home() {
     const newLang = e.target.value;
     setUILanguage(newLang);
     await setLanguage(newLang);
+  };
+
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    setSelectedFiles(e.target.files);
+  };
+
+  const uploadWordFiles = async () => {
+    if (!selectedFiles || selectedFiles.length === 0) {
+      setUploadMessage(t("no_files_selected"));
+      return;
+    }
+
+    const formData = new FormData();
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append("files", selectedFiles[i]);
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/upload_words/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      setUploadMessage(response.data.message);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      setUploadMessage(t("file_upload_error"));
+    }
   };
 
   return (
@@ -251,6 +287,35 @@ export default function Home() {
           </ul>
         </div>
       )}
+      {/* File Upload Section */}
+      <div className={styles.uploadSection}>
+        <h2 className={styles.subheading}>{t("upload_word_files")}</h2>
+        <div className={styles.fileUpload}>
+          <label htmlFor="file-upload" className={styles.fileUploadLabel}>
+            {t("choose_files")}
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            accept=".csv"
+            multiple
+            onChange={handleFileChange}
+            className={styles.fileInput}
+            ref={fileInputRef}
+          />
+          <span className={styles.fileName}>
+            {selectedFiles.length > 0
+              ? Array.from(selectedFiles)
+                  .map((file) => file.name)
+                  .join(", ")
+              : t("no_file_chosen")}
+          </span>
+        </div>
+        <button className={styles.button} onClick={uploadWordFiles}>
+          {t("upload_files")}
+        </button>
+        {uploadMessage && <p className={styles.message}>{uploadMessage}</p>}
+      </div>
     </div>
   );
 }

@@ -60,3 +60,53 @@
   font-size: 16px;
   color: #0070f3;
 }
+
+.uploadSection {
+  margin-top: 20px;
+}
+
+.uploadSection h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.uploadSection input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.subheading {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.fileUpload {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.fileUploadLabel {
+  display: inline-block;
+  font-family: "Comic Neue", cursive;
+  font-size: 18px;
+  padding: 10px 20px;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.fileUploadLabel:hover {
+  background-color: #ffdb4d;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileName {
+  font-size: 16px;
+  font-family: "Comic Neue", cursive;
+  color: #333;
+}

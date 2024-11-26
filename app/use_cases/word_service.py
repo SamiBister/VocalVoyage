@@ -31,7 +31,9 @@ class WordService:
         self.word_queue = self.all_words.copy()
         random.shuffle(self.word_queue)
         self.current_word_index = -1  # Will be incremented in get_next_word()
-        self.repeat_incorrect_count = {}  # Track how many times the user wrote incorrect terms
+        self.repeat_incorrect_count = (
+            {}
+        )  # Track how many times the user wrote incorrect terms
 
     def set_mode(self, mode: str):
         """
@@ -121,3 +123,10 @@ class WordService:
             return self.repeat_incorrect_count[word.foreign_term]
         else:
             return 0  # Should not happen
+
+    def update_words(self, new_words: List[Word]):
+        """
+        Updates the word list with new words.
+        """
+        self.all_words = new_words
+        self.reset_quiz()

@@ -17,5 +17,10 @@
   "good_job_moving_on": "Good job! Let's move on to the next word.",
   "great_keep_writing": "Great! Keep writing.",
   "incorrect_spelling": "Incorrect spelling! Please write \"{{term}}\" again.",
-  "select_language": "Select Language"
+  "select_language": "Select Language",
+  "upload_word_files": "Upload New Word Files",
+  "upload_files": "Upload Files",
+  "no_files_selected": "No files selected.",
+  "file_upload_error": "Error uploading files. Please try again.",
+  "choose_files": "Choose Files"
 }
