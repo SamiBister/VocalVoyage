@@ -1,4 +1,10 @@
-// frontend/pages/index.js
+
+/**
+ * Home component for the VocabVoyage application.
+ * This component handles the quiz functionality, language selection, and file upload.
+ *
+ * @component
+ */
 
 import { useState, useEffect, useRef } from "react";
 import useTranslation from "next-translate/useTranslation";
@@ -8,6 +14,10 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
+/**
+ * Home component.
+ * @returns {JSX.Element} The rendered Home component.
+ */
 export default function Home() {
   const { t, lang } = useTranslation("common");
   const [currentWord, setCurrentWord] = useState(null);
@@ -32,6 +42,10 @@ export default function Home() {
     }
   }, [currentWord, writeCount]);
 
+  /**
+   * Starts the quiz by setting the mode and fetching the first word.
+   * @async
+   */
   const startQuiz = async () => {
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/set_mode/`, {
       mode,
@@ -40,6 +54,10 @@ export default function Home() {
     fetchNextWord();
   };
 
+  /**
+   * Ends the quiz and fetches the results.
+   * @async
+   */
   const endQuiz = async () => {
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/end_quiz/`);
     const response = await axios.get(
@@ -49,6 +67,10 @@ export default function Home() {
     setCurrentWord(null);
   };
 
+  /**
+   * Fetches the next word for the quiz.
+   * @async
+   */
   const fetchNextWord = async () => {
     try {
       const response = await axios.get(
@@ -69,6 +91,10 @@ export default function Home() {
     }
   };
 
+  /**
+   * Submits the user's answer and checks if it is correct.
+   * @async
+   */
   const submitAnswer = async () => {
     if (!currentWord) return;
 
@@ -97,6 +123,9 @@ export default function Home() {
     }
   };
 
+  /**
+   * Handles the repeated incorrect answers.
+   */
   const handleRepeatIncorrect = () => {
     if (
       userInput.trim().toLowerCase() ===
@@ -119,6 +148,10 @@ export default function Home() {
     }
   };
 
+  /**
+   * Handles the key down event for the input field.
+   * @param {Object} e - The event object.
+   */
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       if (writeCount > 0 && writeCount <= 3) {
@@ -129,6 +162,11 @@ export default function Home() {
     }
   };
 
+  /**
+   * Changes the UI language.
+   * @param {Object} e - The event object.
+   * @async
+   */
   const changeLanguage = async (e) => {
     const newLang = e.target.value;
     setUILanguage(newLang);
@@ -137,10 +175,18 @@ export default function Home() {
 
   const fileInputRef = useRef(null);
 
+  /**
+   * Handles the file input change event.
+   * @param {Object} e - The event object.
+   */
   const handleFileChange = (e) => {
     setSelectedFiles(e.target.files);
   };
 
+  /**
+   * Uploads the selected word files.
+   * @async
+   */
   const uploadWordFiles = async () => {
     if (!selectedFiles || selectedFiles.length === 0) {
       setUploadMessage(t("no_files_selected"));
