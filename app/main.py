@@ -15,6 +15,7 @@ Internal Imports:
 
 import os
 import shutil
+import uuid
 from typing import List, Optional
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
