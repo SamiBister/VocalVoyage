@@ -14,6 +14,7 @@ As secondary purpose this is POC for following things:
 - NextJS for frontend
 - Clean code structure for the python backend
 - ChatGPT generated boilerplate.
+- Test fully automated document generation
 
 ## Features
 
@@ -25,6 +26,11 @@ As secondary purpose this is POC for following things:
 - **Logging**: Logs quiz results in Markdown files for review.
 - **Internationalization**: Frontend UI is translatable, supporting multiple languages.
 - **Clean Architecture**: Structured following clean architecture principles for maintainability.
+- Architectural decions recorded in the `docs/adr` folder.
+
+## Documentation
+
+Documents can be found in `docs` folder.
 
 ## Project Structure
 
@@ -264,18 +270,21 @@ The application supports uploading questionnaire files to update or add new ques
 ### **Steps to Upload a Questionnaire File**
 
 1. Prepare your questionnaire file in the required format:
+
    - File type: CSV file.
    - Ensure it follows the structure:
 
      ```csv
 
+     ```
+
 Foreing,Native
 Omena,Apple
 Koulu,Sc
-     ```
+```
 
 2. Access the Upload Feature:
    - Open app
-     - Go to the  URL [http://localhost:3000/](http://localhost:3000/)
+     - Go to the URL [http://localhost:3000/](http://localhost:3000/)
    - Press the **Choose file** button.
    - Press the **Upload files** button.
