@@ -213,10 +213,18 @@ async def upload_words(files: List[UploadFile] = File(...)):
 
     # Save the uploaded files
     for file in files:
+        # Check if filename is not None
+        if not file.filename:
+            # Assign a default unique filename
+            filename = f"{uuid.uuid4()}.csv"
+        else:
+            filename = os.path.basename(file.filename)
+
         # Ensure the uploaded file is a .csv file
-        if not file.filename.endswith(".csv"):
+        if not filename.endswith(".csv"):
             raise HTTPException(status_code=400, detail="Only .csv files are allowed")
-        file_location = os.path.join(data_directory, file.filename)
+
+        file_location = os.path.join(data_directory, filename)
         with open(file_location, "wb+") as file_object:
             shutil.copyfileobj(file.file, file_object)
 
