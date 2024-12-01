@@ -22,7 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from app.domain.models import QuizMode, Word
+from app.domain.models import Word
 from app.interfaces.logger import QuizLogger
 from app.interfaces.repositories import WordRepository
 from app.use_cases.word_service import WordService
