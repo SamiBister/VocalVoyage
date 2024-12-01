@@ -9,12 +9,10 @@
 # review when someone opens a pull request
 
 # Commented to enable the automerging in depandabot
-. * @SamiBister
+* @SamiBister
+
 
 # The `docs/*` pattern will match files like
 
 # `docs/getting-started.md` but not further nested files like
 
-# `docs/build-app/troubleshooting.md`
-
-# docs/*   @orangit-sami-bister
