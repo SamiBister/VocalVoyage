@@ -16,6 +16,7 @@ Dependencies:
     - typing.List: Used for type hinting the return type of load_words method.
     - app.domain.models.Word: The Word class used to create word objects from CSV data.
 """
+
 import csv
 import os
 from typing import List
@@ -53,8 +54,8 @@ class WordRepository:
         """
         Reads CSV files from the specified data folder and returns a list of Word objects.
 
-        Each CSV file should contain rows with at least two columns: the first column for the foreign term 
-        and the second column for the native translation. The method iterates through all CSV files in the 
+        Each CSV file should contain rows with at least two columns: the first column for the foreign term
+        and the second column for the native translation. The method iterates through all CSV files in the
         data folder, reads their contents, and creates Word objects for each valid row.
 
         Returns:

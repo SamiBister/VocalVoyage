@@ -68,8 +68,7 @@ from app.interfaces.logger import QuizLogger
 
 
 class WordService:
-    """Contains the business logic for the VocabVoyage quiz application.
-    """
+    """Contains the business logic for the VocabVoyage quiz application."""
 
     def __init__(self, words: List[Word], logger: QuizLogger):
         """Initializes the WordService with a list of words and a logger.
@@ -81,7 +80,7 @@ class WordService:
         logger : QuizLogger
             A logger instance for logging quiz activities.
         """
-        
+
         self.all_words = words
         self.logger = logger
         self.reset_quiz()
@@ -109,13 +108,10 @@ class WordService:
         self.word_queue = self.all_words.copy()
         random.shuffle(self.word_queue)
         self.current_word_index = -1  # Will be incremented in get_next_word()
-        self.repeat_incorrect_count = (
-            {}
-        )  # Track how many times the user wrote incorrect terms
+        self.repeat_incorrect_count = {}  # Track how many times the user wrote incorrect terms
 
     def set_mode(self, mode: str):
-        """Sets the quiz mode.
-        """
+        """Sets the quiz mode."""
         self.mode = QuizMode(mode)
         self.reset_quiz()
 
@@ -265,7 +261,7 @@ class WordService:
         Returns
         -------
         int
-            The updated count of incorrect repetitions for the given foreign term. 
+            The updated count of incorrect repetitions for the given foreign term.
             Returns 0 if the foreign term is not found in the repeat_incorrect_count dictionary.
         """
         if word.foreign_term in self.repeat_incorrect_count:

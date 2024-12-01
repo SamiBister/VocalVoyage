@@ -131,8 +131,8 @@ class TestWordService(unittest.TestCase):
     def test_check_answer_incorrect(self):
         """
         Test the check_answer method for an incorrect answer.
-        This test verifies that when an incorrect answer is provided to the 
-        check_answer method, the method returns False, increments the incorrect 
+        This test verifies that when an incorrect answer is provided to the
+        check_answer method, the method returns False, increments the incorrect
         counter, and adds the word to the incorrect_words list.
         Assertions:
             - The result of check_answer should be False.

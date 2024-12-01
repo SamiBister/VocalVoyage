@@ -40,7 +40,7 @@ class QuizLogger:
             output_folder (str): The folder where log files will be stored. Defaults to "app/out".
         Creates the output folder if it does not already exist.
         """
-        
+
         self.output_folder = output_folder
         os.makedirs(self.output_folder, exist_ok=True)
 
@@ -48,7 +48,7 @@ class QuizLogger:
         """
         Logs the quiz result into a Markdown file.
         This method creates a Markdown file named with the timestamp of the quiz start time.
-        The file contains details about the quiz, including start and end times, the number of 
+        The file contains details about the quiz, including start and end times, the number of
         correct and incorrect answers, and lists of correctly and incorrectly answered terms.
 
         Args:

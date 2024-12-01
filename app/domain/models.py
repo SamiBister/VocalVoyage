@@ -22,6 +22,7 @@ Classes:
             start_time (datetime): The start time of the quiz.
             end_time (datetime): The end time of the quiz.
 """
+
 from datetime import datetime
 from enum import Enum
 from typing import List
@@ -46,7 +47,7 @@ class QuizMode(str, Enum):
 class Word(BaseModel):
     """
     Represents a word with its foreign term and native translation.
-    
+
     Attributes:
         foreign_term (str): The word in the foreign language.
         native_translation (str): The translation of the foreign term in the native language.

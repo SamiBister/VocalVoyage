@@ -12,6 +12,7 @@ Internal Imports:
 - app.interfaces.repositories: Contains the WordRepository for managing word data.
 - app.use_cases.word_service: Provides the WordService for word-related operations.
 """
+
 import os
 import shutil
 from typing import List, Optional
@@ -55,6 +56,7 @@ class AnswerRequest(BaseModel):
     user_input : str
         The user's input for the word.
     """
+
     word: Word
     user_input: str
 
@@ -67,6 +69,7 @@ class ModeRequest(BaseModel):
     ----------
         mode (str): The quiz mode, either 'normal' or 'infinite'.
     """
+
     mode: str  # 'normal' or 'infinite'
 
 
@@ -102,7 +105,7 @@ async def start_quiz():
     Endpoint to start a new quiz session.
 
     This endpoint resets the current quiz session and starts a new one. It clears any
-    previous quiz data and prepares the system for a new quiz session. This can be 
+    previous quiz data and prepares the system for a new quiz session. This can be
     useful when a user wants to restart the quiz from the beginning.
 
     Returns
@@ -119,8 +122,8 @@ async def end_quiz():
     Endpoint to end the current quiz session and log the results.
 
     This endpoint marks the end of the current quiz session. It triggers the logging
-    of the quiz results, including the number of correct and incorrect answers, and 
-    any other relevant statistics. This can be useful for tracking user performance 
+    of the quiz results, including the number of correct and incorrect answers, and
+    any other relevant statistics. This can be useful for tracking user performance
     and providing feedback.
 
     Returns
@@ -163,6 +166,7 @@ async def check_answer(answer: AnswerRequest):
     """
     is_correct = word_service.check_answer(answer.word, answer.user_input)
     return {"is_correct": is_correct}
+
 
 @app.get("/results/", response_model=dict)
 async def get_results():
