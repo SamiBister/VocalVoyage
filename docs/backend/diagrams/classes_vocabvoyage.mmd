@@ -1,0 +1,54 @@
+classDiagram
+  class AnswerRequest {
+    user_input : str
+    word
+  }
+  class ModeRequest {
+    mode : str
+  }
+  class QuizLogger {
+    output_folder : str
+    log_result(result: QuizResult) None
+  }
+  class QuizMode {
+    name
+  }
+  class QuizResult {
+    correct : int
+    correct_words : List[str]
+    end_time : datetime
+    incorrect : int
+    incorrect_words : List[str]
+    start_time : datetime
+  }
+  class Word {
+    foreign_term : str
+    native_translation : str
+  }
+  class WordRepository {
+    data_folder : str
+    load_words() List[Word]
+  }
+  class WordService {
+    all_words : List[Word]
+    correct : int
+    correct_words : list
+    current_word_index : int
+    incorrect : int
+    incorrect_words : list
+    logger
+    mode : NORMAL
+    repeat_incorrect_count : dict
+    start_time : datetime
+    word_queue
+    check_answer(word: Word, user_input: str) bool
+    end_quiz()
+    get_next_word() Optional[Word]
+    increment_incorrect_repeat(word: Word)
+    reset_quiz()
+    set_mode(mode: str)
+    update_words(new_words: List[Word])
+  }
+  QuizMode --* WordService : mode
+  Word --* AnswerRequest : word
+  QuizLogger --o WordService : logger

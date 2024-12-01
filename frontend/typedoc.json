@@ -1,0 +1,12 @@
+// typedoc.json
+{
+    "entryPoints": ["pages"],
+    "entryPointStrategy": "expand",
+    "out": "../docs/frontend",
+    "exclude": ["**/*.test.*", "**/__tests__/*", "node_modules"],
+    "plugin": ["typedoc-plugin-markdown"],
+    "theme": "markdown",
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": true
+  }

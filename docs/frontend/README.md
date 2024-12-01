@@ -1,3 +1,7 @@
+**frontend**
+
+***
+
 # VocabVoyage
 
 VocabVoyage is a language learning application designed to help kids learn vocabulary through interactive quizzes. The app supports translation between languages and provides a fun and engaging way to expand language skills.
@@ -164,66 +168,13 @@ VocabVoyage/
   - **pages/**: Next.js pages.
   - **locales/**: Translation files for the frontend.
 
-## Update documentation
-
-Run the following command to update the documentation:
-
-```bash
-sh ./document.sh
-```
-
-or in fish shell
-
-```fish
-fish ./document.fish
-```
-
-It is mandatory to run this before each push to remote.
-
-## Linting
-
-### Backend
-
-Run the following command to lint the backend code:
-
-```bash
-uvx ruff check --select I --fix
-uvx ruff format --check .
-```
-
-### Frontend
-
-Run the following command to lint the frontend code:
-
-```bash
-npm run lint
-```
-
-## Testing
-
-### Backend
-
-Run the following command to run the backend tests:
-
-```bash
-uv run pytest -v --durations=0 --cov --cov-report=xml
-```
-
-### Frontend
-
-TBA
-
-```bash
-npm run test
-```
-
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](_media/LICENSE) file for details.
 
 ## Contact
 
@@ -233,49 +184,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 I hope this provides everything you need to get started with **VocabVoyage**. If you have any further questions or need assistance with specific parts of the code, feel free to ask!
 
-It sounds like your README file needs to be updated to include instructions on:
+```
 
-1. **Starting the application with the new scripts.**
-2. **Uploading a new questionnaire file.**
-
-Here’s how you can revise and expand the README to include these sections:
-
----
-
-## **How to Start the Application**
-
-The application uses new scripts for starting the backend and frontend services.
-
-1. Ensure you have UV installed
-2. Ensure you have Node.js and npm/yarn installed.
-3. Start frontend and backend services using the following steps:
-
-   ```bash
-   ./start-dev.sh
-   ```
-
-   - The backend will be accessible at: [http://localhost:3000/](http://localhost:3000/).
-   - The frontend will be accessible at: [http://localhost:3000/](http://localhost:3000/).
-
-## **Uploading a New Questionnaire File**
-
-The application supports uploading questionnaire files to update or add new question sets.
-
-### **Steps to Upload a Questionnaire File**
-
-1. Prepare your questionnaire file in the required format:
-   - File type: CSV file.
-   - Ensure it follows the structure:
-
-     ```csv
-
-Foreing,Native
-Omena,Apple
-Koulu,Sc
-     ```
-
-2. Access the Upload Feature:
-   - Open app
-     - Go to the  URL [http://localhost:3000/](http://localhost:3000/)
-   - Press the **Choose file** button.
-   - Press the **Upload files** button.
+```

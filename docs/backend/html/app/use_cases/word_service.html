@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.3">
+<title>app.use_cases.word_service API documentation</title>
+<meta name="description" content="This module contains the WordService class, which encapsulates the business logic for the VocabVoyage quiz application …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>app.use_cases.word_service</code></h1>
+</header>
+<section id="section-intro">
+<p>This module contains the WordService class, which encapsulates the business logic for the VocabVoyage quiz application.</p>
+<h2 id="classes">Classes</h2>
+<p>WordService</p>
+<h2 id="usage-of-internal-imports">Usage Of Internal Imports</h2>
+<ul>
+<li>app.domain.models: QuizMode, QuizResult, Word</li>
+<li>app.interfaces.logger: QuizLogger</li>
+</ul>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>all_words</code></strong> :&ensp;<code>List[Word]</code></dt>
+<dd>List of all words for the quiz.</dd>
+<dt><strong><code>logger</code></strong> :&ensp;<code>QuizLogger</code></dt>
+<dd>Logger for recording quiz results.</dd>
+<dt><strong><code>correct</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of correct answers.</dd>
+<dt><strong><code>incorrect</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of incorrect answers.</dd>
+<dt><strong><code>incorrect_words</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of incorrectly answered words.</dd>
+<dt><strong><code>correct_words</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of correctly answered words.</dd>
+<dt><strong><code>start_time</code></strong> :&ensp;<code>datetime</code></dt>
+<dd>Start time of the quiz.</dd>
+<dt><strong><code>mode</code></strong> :&ensp;<code>QuizMode</code></dt>
+<dd>Current quiz mode.</dd>
+<dt><strong><code>word_queue</code></strong> :&ensp;<code>List[Word]</code></dt>
+<dd>Queue of words for the quiz.</dd>
+<dt><strong><code>current_word_index</code></strong> :&ensp;<code>int</code></dt>
+<dd>Index of the current word in the queue.</dd>
+<dt><strong><code>repeat_incorrect_count</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Counter for how many times each word was answered incorrectly.</dd>
+</dl>
+<h2 id="methods">Methods</h2>
+<p><strong>init</strong>(words: List[Word], logger: QuizLogger)
+Initializes the WordService with a list of words and a logger.
+reset_quiz()
+Resets the quiz state.
+set_mode(mode: str)
+Sets the quiz mode.
+end_quiz()
+Ends the quiz session and logs the results.
+get_next_word() -&gt; Optional[Word]
+Returns the next word based on the quiz mode.
+_get_next_word_normal() -&gt; Optional[Word]
+Logic for normal mode.
+_get_next_word_infinite() -&gt; Optional[Word]
+Logic for infinite mode.
+check_answer(word: Word, user_input: str) -&gt; bool
+Checks if the user's input matches the foreign term and updates quiz statistics accordingly.
+increment_incorrect_repeat(word: Word)
+Increments the counter for how many times the user has written the incorrect term.
+update_words(new_words: List[Word])
+Updates the word list with new words.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="app.use_cases.word_service.WordService"><code class="flex name class">
+<span>class <span class="ident">WordService</span></span>
+<span>(</span><span>words: List[<a title="app.domain.models.Word" href="../domain/models.html#app.domain.models.Word">Word</a>],<br>logger: <a title="app.interfaces.logger.QuizLogger" href="../interfaces/logger.html#app.interfaces.logger.QuizLogger">QuizLogger</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Contains the business logic for the VocabVoyage quiz application.</p>
+<p>Initializes the WordService with a list of words and a logger.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>words</code></strong> :&ensp;<code>List[Word]</code></dt>
+<dd>A list of Word objects to be used in the quiz.</dd>
+<dt><strong><code>logger</code></strong> :&ensp;<code>QuizLogger</code></dt>
+<dd>A logger instance for logging quiz activities.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WordService:
+    &#34;&#34;&#34;Contains the business logic for the VocabVoyage quiz application.
+    &#34;&#34;&#34;
+
+    def __init__(self, words: List[Word], logger: QuizLogger):
+        &#34;&#34;&#34;Initializes the WordService with a list of words and a logger.
+
+        Parameters
+        ----------
+        words : List[Word]
+            A list of Word objects to be used in the quiz.
+        logger : QuizLogger
+            A logger instance for logging quiz activities.
+        &#34;&#34;&#34;
+        
+        self.all_words = words
+        self.logger = logger
+        self.reset_quiz()
+
+    def reset_quiz(self):
+        &#34;&#34;&#34;Resets the quiz state to its initial configuration.
+
+        This method performs the following actions:
+        - Sets the count of correct answers to zero.
+        - Sets the count of incorrect answers to zero.
+        - Clears the list of incorrect words.
+        - Clears the list of correct words.
+        - Records the current time as the start time of the quiz.
+        - Sets the quiz mode to NORMAL.
+        - Copies all words to the word queue and shuffles them.
+        - Resets the current word index to -1, which will be incremented when fetching the next word.
+        - Initializes a dictionary to track the number of times each word was answered incorrectly.
+        &#34;&#34;&#34;
+        self.correct = 0
+        self.incorrect = 0
+        self.incorrect_words = []
+        self.correct_words = []
+        self.start_time = datetime.now()
+        self.mode = QuizMode.NORMAL
+        self.word_queue = self.all_words.copy()
+        random.shuffle(self.word_queue)
+        self.current_word_index = -1  # Will be incremented in get_next_word()
+        self.repeat_incorrect_count = (
+            {}
+        )  # Track how many times the user wrote incorrect terms
+
+    def set_mode(self, mode: str):
+        &#34;&#34;&#34;Sets the quiz mode.
+        &#34;&#34;&#34;
+        self.mode = QuizMode(mode)
+        self.reset_quiz()
+
+    def end_quiz(self):
+        &#34;&#34;&#34;Ends the quiz session, calculates the results, and logs them.
+
+        This method captures the end time of the quiz, creates a QuizResult object
+        containing the number of correct and incorrect answers, the lists of correct
+        and incorrect words, and the start and end times of the quiz. It then logs
+        the result using the logger.
+
+        Parameters
+        ----------
+        correct : int
+            The number of correct answers.
+        incorrect : int
+            The number of incorrect answers.
+        correct_words : list
+            The list of correctly answered words.
+        incorrect_words : list
+            The list of incorrectly answered words.
+        start_time : datetime
+            The start time of the quiz session.
+        logger : Logger
+            The logger instance used to log the quiz results.
+        &#34;&#34;&#34;
+        end_time = datetime.now()
+        result = QuizResult(
+            correct=self.correct,
+            incorrect=self.incorrect,
+            correct_words=list(set(self.correct_words)),
+            incorrect_words=list(set(self.incorrect_words)),
+            start_time=self.start_time,
+            end_time=end_time,
+        )
+        self.logger.log_result(result)
+
+    def get_next_word(self) -&gt; Optional[Word]:
+        &#34;&#34;&#34;Retrieves the next word based on the current quiz mode.
+
+        Returns
+        -------
+        Optional[Word]
+            The next word to be used in the quiz. Returns a Word object if a word is available,
+            otherwise returns None.
+
+        Raises
+        ------
+        None
+        &#34;&#34;&#34;
+        if self.mode == QuizMode.NORMAL:
+            return self._get_next_word_normal()
+        elif self.mode == QuizMode.INFINITE:
+            return self._get_next_word_infinite()
+        else:
+            return None
+
+    def _get_next_word_normal(self) -&gt; Optional[Word]:
+        &#34;&#34;&#34;Retrieve the next word in the queue for normal mode.
+
+        In normal mode, the user is presented with words sequentially.
+        If the user answers incorrectly, it is simply marked as wrong in the results.
+
+        Returns
+        -------
+        Optional[Word]
+            The next word in the queue if available, otherwise None.
+        &#34;&#34;&#34;
+        self.current_word_index += 1
+        if self.current_word_index &lt; len(self.word_queue):
+            return self.word_queue[self.current_word_index]
+        else:
+            return None  # No more words left
+
+    def _get_next_word_infinite(self) -&gt; Optional[Word]:
+        &#34;&#34;&#34;Retrieve the next word in the queue for infinite mode.
+
+        In infinite mode, the user is presented with words sequentially.
+        If the user answers incorrectly, it is returned to queue for repetition.
+
+        Returns
+        -------
+        Optional[Word]
+            The next word in the queue if available, otherwise None.
+        &#34;&#34;&#34;
+        if self.current_word_index + 1 &lt; len(self.word_queue):
+            self.current_word_index += 1
+            return self.word_queue[self.current_word_index]
+        elif self.incorrect_words:
+            # Reset the queue with incorrect words
+            self.word_queue = [
+                Word(foreign_term=word, native_translation=&#34;&#34;)
+                for word in self.incorrect_words
+            ]
+            self.incorrect_words = []
+            self.current_word_index = 0
+            return self.word_queue[self.current_word_index]
+        else:
+            return None  # All words answered correctly
+
+    def check_answer(self, word: Word, user_input: str) -&gt; bool:
+        &#34;&#34;&#34;Check if the user&#39;s input matches the foreign term of the given word.
+
+        Parameters
+        ----------
+        word : Word
+            The word object containing the foreign term to be checked.
+        user_input : str
+            The user&#39;s input to be compared with the foreign term.
+
+        Returns
+        -------
+        bool
+            True if the user&#39;s input matches the foreign term, False otherwise.
+
+        Side Effects
+        ------------
+        - Increments the correct answer count and appends the foreign term to
+          the correct_words list if the answer is correct.
+        - Increments the incorrect answer count and appends the foreign term to
+          the incorrect_words list if the answer is incorrect.
+        - Removes the foreign term from repeat_incorrect_count if the answer is
+          correct and it exists in the dictionary.
+        - Initializes the repeat_incorrect_count for the foreign term to 0 if
+          the answer is incorrect.
+        &#34;&#34;&#34;
+        is_correct = word.foreign_term.strip().lower() == user_input.strip().lower()
+        if is_correct:
+            self.correct += 1
+            self.correct_words.append(word.foreign_term)
+            if word.foreign_term in self.repeat_incorrect_count:
+                del self.repeat_incorrect_count[word.foreign_term]
+        else:
+            self.incorrect += 1
+            self.incorrect_words.append(word.foreign_term)
+            self.repeat_incorrect_count[word.foreign_term] = 0  # Initialize counter
+        return is_correct
+
+    def increment_incorrect_repeat(self, word: Word):
+        &#34;&#34;&#34;Increments the counter for the number of times the user has written the incorrect term for a given word.
+
+        Parameters
+        ----------
+        word : Word
+            The word object containing the foreign term to be incremented.
+
+        Returns
+        -------
+        int
+            The updated count of incorrect repetitions for the given foreign term. 
+            Returns 0 if the foreign term is not found in the repeat_incorrect_count dictionary.
+        &#34;&#34;&#34;
+        if word.foreign_term in self.repeat_incorrect_count:
+            self.repeat_incorrect_count[word.foreign_term] += 1
+            return self.repeat_incorrect_count[word.foreign_term]
+        else:
+            return 0  # Should not happen
+
+    def update_words(self, new_words: List[Word]):
+        &#34;&#34;&#34;Updates the internal word list with a new set of words and resets the quiz.
+
+        Parameters
+        ----------
+        new_words : List[Word]
+            A list of Word objects to update the internal word list with.
+
+        Returns
+        -------
+        None
+        &#34;&#34;&#34;
+        self.all_words = new_words
+        self.reset_quiz()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="app.use_cases.word_service.WordService.check_answer"><code class="name flex">
+<span>def <span class="ident">check_answer</span></span>(<span>self,<br>word: <a title="app.domain.models.Word" href="../domain/models.html#app.domain.models.Word">Word</a>,<br>user_input: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if the user's input matches the foreign term of the given word.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>word</code></strong> :&ensp;<code>Word</code></dt>
+<dd>The word object containing the foreign term to be checked.</dd>
+<dt><strong><code>user_input</code></strong> :&ensp;<code>str</code></dt>
+<dd>The user's input to be compared with the foreign term.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the user's input matches the foreign term, False otherwise.</dd>
+</dl>
+<h2 id="side-effects">Side Effects</h2>
+<ul>
+<li>Increments the correct answer count and appends the foreign term to
+the correct_words list if the answer is correct.</li>
+<li>Increments the incorrect answer count and appends the foreign term to
+the incorrect_words list if the answer is incorrect.</li>
+<li>Removes the foreign term from repeat_incorrect_count if the answer is
+correct and it exists in the dictionary.</li>
+<li>Initializes the repeat_incorrect_count for the foreign term to 0 if
+the answer is incorrect.</li>
+</ul></div>
+</dd>
+<dt id="app.use_cases.word_service.WordService.end_quiz"><code class="name flex">
+<span>def <span class="ident">end_quiz</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Ends the quiz session, calculates the results, and logs them.</p>
+<p>This method captures the end time of the quiz, creates a QuizResult object
+containing the number of correct and incorrect answers, the lists of correct
+and incorrect words, and the start and end times of the quiz. It then logs
+the result using the logger.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>correct</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of correct answers.</dd>
+<dt><strong><code>incorrect</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of incorrect answers.</dd>
+<dt><strong><code>correct_words</code></strong> :&ensp;<code>list</code></dt>
+<dd>The list of correctly answered words.</dd>
+<dt><strong><code>incorrect_words</code></strong> :&ensp;<code>list</code></dt>
+<dd>The list of incorrectly answered words.</dd>
+<dt><strong><code>start_time</code></strong> :&ensp;<code>datetime</code></dt>
+<dd>The start time of the quiz session.</dd>
+<dt><strong><code>logger</code></strong> :&ensp;<code>Logger</code></dt>
+<dd>The logger instance used to log the quiz results.</dd>
+</dl></div>
+</dd>
+<dt id="app.use_cases.word_service.WordService.get_next_word"><code class="name flex">
+<span>def <span class="ident">get_next_word</span></span>(<span>self) ‑> <a title="app.domain.models.Word" href="../domain/models.html#app.domain.models.Word">Word</a> | None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Retrieves the next word based on the current quiz mode.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Optional[Word]</code></dt>
+<dd>The next word to be used in the quiz. Returns a Word object if a word is available,
+otherwise returns None.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>None</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+</dd>
+<dt id="app.use_cases.word_service.WordService.increment_incorrect_repeat"><code class="name flex">
+<span>def <span class="ident">increment_incorrect_repeat</span></span>(<span>self,<br>word: <a title="app.domain.models.Word" href="../domain/models.html#app.domain.models.Word">Word</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Increments the counter for the number of times the user has written the incorrect term for a given word.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>word</code></strong> :&ensp;<code>Word</code></dt>
+<dd>The word object containing the foreign term to be incremented.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>The updated count of incorrect repetitions for the given foreign term.
+Returns 0 if the foreign term is not found in the repeat_incorrect_count dictionary.</dd>
+</dl></div>
+</dd>
+<dt id="app.use_cases.word_service.WordService.reset_quiz"><code class="name flex">
+<span>def <span class="ident">reset_quiz</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Resets the quiz state to its initial configuration.</p>
+<p>This method performs the following actions:
+- Sets the count of correct answers to zero.
+- Sets the count of incorrect answers to zero.
+- Clears the list of incorrect words.
+- Clears the list of correct words.
+- Records the current time as the start time of the quiz.
+- Sets the quiz mode to NORMAL.
+- Copies all words to the word queue and shuffles them.
+- Resets the current word index to -1, which will be incremented when fetching the next word.
+- Initializes a dictionary to track the number of times each word was answered incorrectly.</p></div>
+</dd>
+<dt id="app.use_cases.word_service.WordService.set_mode"><code class="name flex">
+<span>def <span class="ident">set_mode</span></span>(<span>self, mode: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets the quiz mode.</p></div>
+</dd>
+<dt id="app.use_cases.word_service.WordService.update_words"><code class="name flex">
+<span>def <span class="ident">update_words</span></span>(<span>self,<br>new_words: List[<a title="app.domain.models.Word" href="../domain/models.html#app.domain.models.Word">Word</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates the internal word list with a new set of words and resets the quiz.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>new_words</code></strong> :&ensp;<code>List[Word]</code></dt>
+<dd>A list of Word objects to update the internal word list with.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>None</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul>
+<li><a href="#classes">Classes</a></li>
+<li><a href="#usage-of-internal-imports">Usage of internal imports</a></li>
+<li><a href="#attributes">Attributes</a></li>
+<li><a href="#methods">Methods</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="app.use_cases" href="index.html">app.use_cases</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="app.use_cases.word_service.WordService" href="#app.use_cases.word_service.WordService">WordService</a></code></h4>
+<ul class="">
+<li><code><a title="app.use_cases.word_service.WordService.check_answer" href="#app.use_cases.word_service.WordService.check_answer">check_answer</a></code></li>
+<li><code><a title="app.use_cases.word_service.WordService.end_quiz" href="#app.use_cases.word_service.WordService.end_quiz">end_quiz</a></code></li>
+<li><code><a title="app.use_cases.word_service.WordService.get_next_word" href="#app.use_cases.word_service.WordService.get_next_word">get_next_word</a></code></li>
+<li><code><a title="app.use_cases.word_service.WordService.increment_incorrect_repeat" href="#app.use_cases.word_service.WordService.increment_incorrect_repeat">increment_incorrect_repeat</a></code></li>
+<li><code><a title="app.use_cases.word_service.WordService.reset_quiz" href="#app.use_cases.word_service.WordService.reset_quiz">reset_quiz</a></code></li>
+<li><code><a title="app.use_cases.word_service.WordService.set_mode" href="#app.use_cases.word_service.WordService.set_mode">set_mode</a></code></li>
+<li><code><a title="app.use_cases.word_service.WordService.update_words" href="#app.use_cases.word_service.WordService.update_words">update_words</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+</footer>
+</body>
+</html>

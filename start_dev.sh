@@ -24,4 +24,4 @@ npm run dev
 wait
 
 # When done, kill the backend server
-kill $BACKEND_PID
+lsof -ti :8000 | xargs kill

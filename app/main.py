@@ -1,5 +1,4 @@
 # app/main.py
-
 """
 VocabVoyage API
 
@@ -13,7 +12,6 @@ Internal Imports:
 - app.interfaces.repositories: Contains the WordRepository for managing word data.
 - app.use_cases.word_service: Provides the WordService for word-related operations.
 """
-
 import os
 import shutil
 from typing import List, Optional
@@ -50,9 +48,12 @@ class AnswerRequest(BaseModel):
     """
     Request model for submitting an answer.
 
-    Attributes:
-        word (Word): The word object of the questioner.
-        user_input (str): The user's input for the word.
+    Attributes
+    ----------
+    word : Word
+        The word object of the questioner.
+    user_input : str
+        The user's input for the word.
     """
     word: Word
     user_input: str
@@ -62,7 +63,8 @@ class ModeRequest(BaseModel):
     """
     Request model for setting the quiz mode.
 
-    Attributes:
+    Attributes
+    ----------
         mode (str): The quiz mode, either 'normal' or 'infinite'.
     """
     mode: str  # 'normal' or 'infinite'
@@ -73,14 +75,20 @@ async def set_mode(request: ModeRequest):
     """
     Sets the quiz mode.
 
-    Args:
-        request (ModeRequest): The request containing the desired mode.
+    Parameters
+    ----------
+    request : ModeRequest
+        The request containing the desired mode.
 
-    Raises:
-        HTTPException: If the mode is not 'normal' or 'infinite'.
+    Raises
+    ------
+    HTTPException
+        If the mode is not 'normal' or 'infinite'.
 
-    Returns:
-        JSONResponse: A response indicating the mode has been set.
+    Returns
+    -------
+    JSONResponse
+        A response indicating the mode has been set.
     """
     if request.mode not in ["normal", "infinite"]:
         raise HTTPException(status_code=400, detail="Invalid mode")
@@ -97,7 +105,8 @@ async def start_quiz():
     previous quiz data and prepares the system for a new quiz session. This can be 
     useful when a user wants to restart the quiz from the beginning.
 
-    Returns:
+    Returns
+    -------
         JSONResponse: A response indicating that the quiz has started.
     """
     word_service.reset_quiz()
@@ -114,7 +123,8 @@ async def end_quiz():
     any other relevant statistics. This can be useful for tracking user performance 
     and providing feedback.
 
-    Returns:
+    Returns
+    -------
         JSONResponse: A response indicating that the quiz has ended and results have been logged.
     """
     word_service.end_quiz()
@@ -126,7 +136,8 @@ async def get_next_word():
     """
     Endpoint to retrieve the next word in the quiz.
 
-    Returns:
+    Returns
+    -------
         Optional[Word]: The next word in the quiz, or None if there are no more words.
     """
     word = word_service.get_next_word()
@@ -138,16 +149,17 @@ async def get_next_word():
 @app.post("/check/", response_model=dict)
 async def check_answer(answer: AnswerRequest):
     """
-    Endpoint to check if the user's answer is correct.
-    
     Check if the user's answer is correct.
 
-    Args:
-        answer (AnswerRequest): The user's answer request containing the word and user input.
+    Parameters
+    ----------
+    answer : AnswerRequest
+        The user's answer request containing the word and user input.
 
-    Returns:
-        dict: A dictionary with a key 'is_correct' indicating whether the user's answer is correct.
-  
+    Returns
+    -------
+    dict
+        A dictionary with a key 'is_correct' indicating whether the user's answer is correct.
     """
     is_correct = word_service.check_answer(answer.word, answer.user_input)
     return {"is_correct": is_correct}
@@ -173,14 +185,20 @@ async def upload_words(files: List[UploadFile] = File(...)):
     existing word files in the data directory and replaces them with the newly uploaded
     files. The words from the new files are then loaded into the system.
 
-    Args:
-        files (List[UploadFile]): A list of uploaded files. Each file must be in CSV format.
+    Parameters
+    ----------
+    files : List[UploadFile]
+        A list of uploaded files. Each file must be in CSV format.
 
-    Raises:
-        HTTPException: If any of the uploaded files is not a CSV file.
+    Raises
+    ------
+    HTTPException
+        If any of the uploaded files is not a CSV file.
 
-    Returns:
-        dict: A message indicating that the word files have been uploaded and the word list has been updated.
+    Returns
+    -------
+    dict
+        A message indicating that the word files have been uploaded and the word list has been updated.
     """
     data_directory = "app/data"
     # Clear existing files in the data directory

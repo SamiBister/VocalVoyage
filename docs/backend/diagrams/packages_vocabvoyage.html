@@ -1,0 +1,34 @@
+<html>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <div class="mermaid">
+    
+        classDiagram
+          class domain {
+          }
+          class models {
+          }
+          class interfaces {
+          }
+          class logger {
+          }
+          class repositories {
+          }
+          class main {
+          }
+          class use_cases {
+          }
+          class word_service {
+          }
+          logger --> models
+          repositories --> models
+          main --> models
+          main --> logger
+          main --> repositories
+          main --> word_service
+          word_service --> models
+          word_service --> logger
+  
+       </div>
+  </body>
+</html>
