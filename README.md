@@ -209,18 +209,26 @@ npm run lint
 
 ### Backend
 
-Run the following command to run the backend tests:
+Run the following command to run the backend unit tests:
 
 ```bash
-uv run pytest -v --durations=0 --cov --cov-report=xml
+uv run pytest -m unit -vvvv --durations=0 --cov --cov-report=xml
 ```
 
 ### Frontend
 
-TBA
+Run the following for the frontend unit tests:
 
 ```bash
 npm run test
+```
+
+### End-to-end tests
+
+Run the following command to run the backend unit tests:
+
+```bash
+uv run pytest -m e2e -vvvv --durations=0 --cov --cov-report=xml
 ```
 
 ## Contributing
@@ -281,6 +289,7 @@ The application supports uploading questionnaire files to update or add new ques
 Foreing,Native
 Omena,Apple
 Koulu,Sc
+
 ```
 
 2. Access the Upload Feature:
@@ -288,3 +297,4 @@ Koulu,Sc
      - Go to the URL [http://localhost:3000/](http://localhost:3000/)
    - Press the **Choose file** button.
    - Press the **Upload files** button.
+```

@@ -15,6 +15,7 @@ TestWordService Methods:
     test_increment_incorrect_repeat: Tests the increment_incorrect_repeat method.
 """
 
+import pytest
 import unittest
 from unittest.mock import MagicMock
 
@@ -38,6 +39,7 @@ class TestWordService(unittest.TestCase):
     - service: An instance of WordService initialized with the test words and mock logger.
     """
 
+    @pytest.mark.unit
     def setUp(self):
         """
         Set up the test environment for WordService tests.
@@ -52,6 +54,7 @@ class TestWordService(unittest.TestCase):
         self.mock_logger = MagicMock(spec=QuizLogger)
         self.service = WordService(self.words, self.mock_logger)
 
+    @pytest.mark.unit
     def test_get_next_word_normal(self):
         """
         Test the `get_next_word` method in "normal" mode.
@@ -78,6 +81,7 @@ class TestWordService(unittest.TestCase):
         self.assertEqual(self.service.correct, len(self.words))
         self.assertEqual(self.service.incorrect, 0)
 
+    @pytest.mark.unit
     def test_get_next_word_infinite(self):
         """
         Tests the `get_next_word` method in "infinite" mode.
@@ -108,6 +112,7 @@ class TestWordService(unittest.TestCase):
         self.assertEqual(self.service.correct, 0)
         self.assertEqual(self.service.incorrect, len(words_asked))
 
+    @pytest.mark.unit
     def test_check_answer_correct(self):
         """
         Test case for checking if the answer is correct.
@@ -128,6 +133,7 @@ class TestWordService(unittest.TestCase):
         self.assertEqual(self.service.correct, 1)
         self.assertEqual(self.service.incorrect, 0)
 
+    @pytest.mark.unit
     def test_check_answer_incorrect(self):
         """
         Test the check_answer method for an incorrect answer.
@@ -148,6 +154,7 @@ class TestWordService(unittest.TestCase):
         self.assertEqual(self.service.incorrect, 1)
         self.assertIn("Hello", self.service.incorrect_words)
 
+    @pytest.mark.unit
     def test_increment_incorrect_repeat(self):
         """
         Test the increment_incorrect_repeat method of the word service.
