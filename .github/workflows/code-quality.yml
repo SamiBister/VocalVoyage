@@ -49,7 +49,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          uv install
+          uv sync
           cd frontend
           npm install
 
