@@ -53,14 +53,15 @@ jobs:
           cd frontend
           npm install
 
-      - name: Build Frontend
+      # - name: Build Frontend
+      #   run: |
+      #     cd frontend
+      #     npm run build
+
+      - name: Start Backend Server
         run: |
-          cd frontend
-          npm run build
-          - name: Start Backend Server
-          run: |
-            uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 &
-            echo $! > backend_pid.txt
+          uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          echo $! > backend_pid.txt
 
       - name: Start Frontend Server
         run: |
