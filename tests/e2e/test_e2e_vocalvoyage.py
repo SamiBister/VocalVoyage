@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -54,7 +55,7 @@ async def test_query_fi() -> None:
         # await page.wait_for_timeout(10000)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_{timestamp}.png"))
-        print(await page.content())
+        # print(await page.content())
         page.on("console", lambda msg: print("PAGE CONSOLE:", msg.text))
         page.on("pageerror", lambda exc: print("PAGE ERROR:", exc))
         page.on(
@@ -65,13 +66,13 @@ async def test_query_fi() -> None:
             "response",
             lambda response: print("RESPONSE:", response.url, response.status),
         )
-        print(await page.content())
+        # print(await page.content())
 
         await page.wait_for_selector(
             "[data-testid='answer-input']", state="visible", timeout=20000
         )
-        await page.get_by_test_id("start-quiz-button").fill("apple")
-        await page.get_by_test_id("start-quiz-button").press("Enter")
+        await page.get_by_test_id("answer-input").fill("apple")
+        await page.get_by_test_id("answer-input").press("Enter")
         # Locate the translate-message element
         correct_message = page.get_by_test_id("correct-message")
 
