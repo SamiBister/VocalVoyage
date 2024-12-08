@@ -58,15 +58,25 @@ jobs:
           cd frontend
           npm run build
 
+      # - name: Start Backend Server
+      #   run: |
+      #     uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+      #     echo $! > backend_pid.txt
       - name: Start Backend Server
         run: |
-          uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          uv run uvicorn app.main:app --reload &
           echo $! > backend_pid.txt
+
+      # - name: Start Frontend Server
+      #   run: |
+      #     cd frontend
+      #     npm run start -- --hostname 0.0.0.0 &
+      #     echo $! > ../frontend_pid.txt
 
       - name: Start Frontend Server
         run: |
           cd frontend
-          npm run start -- --hostname 0.0.0.0 &
+          npm run dev &
           echo $! > ../frontend_pid.txt
 
       - name: Wait for Backend to Start
