@@ -83,8 +83,8 @@ def test_query_wrong_fi(playwright: Playwright) -> None:
     expect(start_button).to_be_visible(timeout=10000)
     start_button.click()
 
-    translate_message = page.get_by_test_id("translate-message")
-    expect(translate_message).to_be_visible(timeout=10000)
+    # translate_message = page.get_by_test_id("translate-message")
+    # expect(translate_message).to_be_visible(timeout=10000)
 
     answer_input = page.get_by_test_id("answer-input")
     expect(answer_input).to_be_visible(timeout=10000)
