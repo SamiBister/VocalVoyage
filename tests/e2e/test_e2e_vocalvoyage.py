@@ -38,18 +38,25 @@ ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 @pytest.mark.e2e
 async def test_query_fi() -> None:
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(headless=False, slow_mo=500)
         context = await browser.new_context()
         page = await context.new_page()
 
         # Navigate and start quiz
         await page.goto("http://localhost:3000/fi")
+        await page.wait_for_load_state("networkidle")
 
         # Click start quiz and wait for button to be ready
         await page.get_by_test_id("start-quiz-button").click()
         await page.wait_for_timeout(10000)
-        await page.get_by_test_id("answer-input").fill("apple")
-        await page.get_by_test_id("answer-input").press("Enter")
+        await page.wait_for_selector(
+            "[data-testid='answer-input']", state="visible", timeout=20000
+        )
+        answer_input = page.locator("[data-testid='answer-input']")
+
+        await answer_input.wait_for(state="visible")
+        await answer_input.fill("apple")
+        await answer_input.press("Enter")
         # Locate the translate-message element
         correct_message = page.get_by_test_id("correct-message")
 
