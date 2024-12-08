@@ -96,6 +96,12 @@ jobs:
       #   run: |
       #     kill $(cat backend_pid.txt)
       #     kill $(cat frontend_pid.txt)
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-artifacts
+          path: test-artifacts/
 
   build:
     runs-on: [ubuntu-latest]

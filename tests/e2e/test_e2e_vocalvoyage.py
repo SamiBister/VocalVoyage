@@ -1,7 +1,12 @@
+import os
 from datetime import datetime
+from pathlib import Path
 
 import pytest
 from playwright.sync_api import Playwright, expect
+
+ARTIFACTS_DIR = Path(os.environ.get("GITHUB_WORKSPACE", ".")) / "test-artifacts"
+ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @pytest.mark.e2e
@@ -96,6 +101,8 @@ def test_degug_fi(playwright: Playwright) -> None:
             start_button.click(timeout=5000)
         except Exception as e:
             # Take debug screenshot
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            page.screenshot(path=str(ARTIFACTS_DIR / f"error_en_{timestamp}.png"))
             page.screenshot(path="button-click-failed.png")
             print(f"Click failed: {str(e)}")
             print(f"Page content: {page.content()}")
@@ -107,7 +114,10 @@ def test_degug_fi(playwright: Playwright) -> None:
 
     except Exception:
         # Take failure screenshot
-        page.screenshot(path=f"test-failure-{datetime.now().timestamp()}.png")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        page.screenshot(
+            path=str(ARTIFACTS_DIR / f"test-failure-error_en_{timestamp}.png")
+        )
         raise
     finally:
         context.close()
