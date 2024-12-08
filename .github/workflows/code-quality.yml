@@ -58,32 +58,33 @@ jobs:
           cd frontend
           npm run build
 
-      # - name: Start Backend Server
-      #   run: |
-      #     uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 &
-      #     echo $! > backend_pid.txt
+      - name: Start Backend Server
+        run: |
+          uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          echo $! > backend_pid.txt
 
-      # - name: Start Frontend Server
-      #   run: |
-      #     cd frontend
-      #     npm run start -- --hostname 0.0.0.0 &
-      #     echo $! > ../frontend_pid.txt
+      - name: Start Frontend Server
+        run: |
+          cd frontend
+          npm run start -- --hostname 0.0.0.0 &
+          echo $! > ../frontend_pid.txt
 
-      # - name: Wait for Backend to Start
-      #   run: |
-      #     until curl -s http://localhost:8000/docs; do
-      #       echo "Waiting for backend server..."
-      #       sleep 5
-      #     done
-      #     echo "Backend server is up!"
+      - name: Wait for Backend to Start
+        run: |
+          until curl -s http://localhost:8000/docs; do
+            echo "Waiting for backend server..."
+            sleep 5
+          done
+          echo "Backend server is up!"
 
-      # - name: Wait for Frontend to Start
-      #   run: |
-      #     until curl -s http://localhost:3000/; do
-      #       echo "Waiting for frontend server..."
-      #       sleep 5
-      #     done
-      #     echo "Frontend server is up!"
+      - name: Wait for Frontend to Start
+        run: |
+          until curl -s http://localhost:3000/; do
+            echo "Waiting for frontend server..."
+            sleep 5
+          done
+          echo "Frontend server is up!"
+
       - name: Set Environment Variables
         run: echo "NEXT_PUBLIC_API_URL=http://localhost:3000" >> $GITHUB_ENV
 

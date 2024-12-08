@@ -44,7 +44,7 @@ async def test_query_fi() -> None:
         page = await context.new_page()
 
         # Navigate and start quiz
-        await page.goto("http://localhost:3000/fi")
+        await page.goto("http://localhost:3000")
         await page.wait_for_load_state("networkidle")
 
         # Click start quiz and wait for button to be ready
