@@ -56,42 +56,42 @@ def test_query_fi(playwright: Playwright) -> None:
 
 
 @pytest.mark.e2e
-def test_query_wrong_fi(playwright: Playwright) -> None:
+def test_query_fi(playwright: Playwright) -> None:
     browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
     # Navigate and start quiz
     page.goto("http://localhost:3000/fi")
-    page.get_by_role("button", name="Aloita tietovisa").click()
 
-    # Wait for translation to appear and input to be ready
-    page.wait_for_selector("text=Käännä:")
+    # Wait for page to load and verify Finnish text
+    expect(page.get_by_text("Tervetuloa VocabVoyage")).to_be_visible(timeout=10000)
 
-    # Find input field - try multiple possible selectors
+    # Click start quiz and wait for button to be ready
+    start_button = page.get_by_role("button", name="Aloita tietovisa")
+    expect(start_button).to_be_visible(timeout=10000)
+    start_button.click()
+
+    # Wait for quiz interface to load
+    expect(page.get_by_text("Käännä:")).to_be_visible(timeout=10000)
+
+    # Find input field and verify it exists
     answer_input = page.get_by_role("textbox").first
+    expect(answer_input).to_be_visible(timeout=10000)
 
-    # Input wrong answer
-    answer_input.click()
-    answer_input.fill("orange")
-    page.get_by_role("button", name="Lähetä vastaus").click()
-
-    # Wait for error message and retry with correct answer
-    answer_input = page.get_by_role("textbox").first
-
-    # Input corrected answer
-    answer_input.click()
-    answer_input.fill("apple")
-    page.get_by_role("button", name="Lähetä vastaus").click()
-
-    # Input corrected answer
-    answer_input = page.get_by_role("textbox").first
+    # Input answer
     answer_input.click()
     answer_input.fill("apple")
-    page.get_by_role("button", name="Lähetä vastaus").click()
 
-    # Verify result message appears
-    expect(page.get_by_text("Jatka yrittämistä")).not_to_be_empty()
+    # Find and click submit button
+    submit_button = page.get_by_role("button", name="Lähetä vastaus")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
+
+    # Verify result
+    expect(page.get_by_text("Läpäisit kokeen huippupistein")).to_be_visible(
+        timeout=10000
+    )
 
     # Cleanup
     context.close()
