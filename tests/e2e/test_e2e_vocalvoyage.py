@@ -52,9 +52,9 @@ async def test_query_fi() -> None:
         # await page.get_by_test_id("start-quiz-button").click()
         await page.get_by_test_id("start-quiz-button").scroll_into_view_if_needed()
         await page.get_by_test_id("start-quiz-button").click(force=True)
-        # await page.wait_for_timeout(10000)
+        await page.wait_for_timeout(10000)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_{timestamp}.png"))
+        await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_x{timestamp}.png"))
         # print(await page.content())
         page.on("console", lambda msg: print("PAGE CONSOLE:", msg.text))
         page.on("pageerror", lambda exc: print("PAGE ERROR:", exc))
@@ -68,10 +68,12 @@ async def test_query_fi() -> None:
         )
         # print(await page.content())
 
-        await page.wait_for_selector(
-            "[data-testid='answer-input']", state="visible", timeout=20000
-        )
+        # await page.wait_for_selector(
+        #     "[data-testid='answer-input']", state="visible", timeout=20000
+        # )
         await page.get_by_test_id("answer-input").fill("apple")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        await page.screenshot(path=str(ARTIFACTS_DIR / f"after_fill_{timestamp}.png"))
         await page.get_by_test_id("answer-input").press("Enter")
         # Locate the translate-message element
         correct_message = page.get_by_test_id("correct-message")
