@@ -47,7 +47,8 @@ def test_query_fi(playwright: Playwright) -> None:
     expect(welcome_message).to_be_visible(timeout=10000)
 
     # Click start quiz and wait for button to be ready
-    page.get_by_test_id("start-quiz-buttonxxxxx").click()
+    page.get_by_test_id("start-quiz-button").click()
+    page.wait_for_timeout(10000)
     page.get_by_test_id("answer-input").fill("apple")
     page.get_by_test_id("answer-input").press("Enter")
 
