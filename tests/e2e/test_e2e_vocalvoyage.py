@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -44,21 +43,21 @@ async def test_query_fi() -> None:
         context = await browser.new_context()
         page = await context.new_page()
 
-        # Register event listeners before navigation
-        async def log_response(response):
-            print(
-                f"RESPONSE: URL={response.url}, Status={response.status}, "
-                f"Headers={await response.all_headers()}"
-            )
+        # # Register event listeners before navigation
+        # async def log_response(response):
+        #     print(
+        #         f"RESPONSE: URL={response.url}, Status={response.status}, "
+        #         f"Headers={await response.all_headers()}"
+        #     )
 
-        async def log_request_failed(request):
-            print(
-                f"REQUEST FAILED: URL={request.url}, "
-                f"Failure={request.failure}, Method={request.method}"
-            )
+        # async def log_request_failed(request):
+        #     print(
+        #         f"REQUEST FAILED: URL={request.url}, "
+        #         f"Failure={request.failure}, Method={request.method}"
+        #     )
 
         # Navigate and start quiz
-        await page.goto("http://localhost:3000")
+        await page.goto("http://localhost:3000/fi")
         await page.wait_for_load_state("networkidle")
 
         # Click start quiz and wait for button to be ready
@@ -66,21 +65,10 @@ async def test_query_fi() -> None:
         await page.get_by_test_id("start-quiz-button").scroll_into_view_if_needed()
         await page.get_by_test_id("start-quiz-button").click(force=True)
         await page.wait_for_timeout(10000)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_y{timestamp}.png"))
-        # print(await page.content())
-        page.on("console", lambda msg: print(f"CONSOLE: {msg.text}"))
-        page.on("pageerror", lambda exc: print(f"PAGE ERROR: {exc}"))
-        page.on("requestfailed", log_request_failed)
-        page.on("response", log_response)
-        # print(await page.content())
-
         await page.wait_for_selector(
             "[data-testid='answer1']", state="visible", timeout=20000
         )
         await page.get_by_test_id("answer1").fill("apple")
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        await page.screenshot(path=str(ARTIFACTS_DIR / f"after_fill_{timestamp}.png"))
         await page.get_by_test_id("answer1").press("Enter")
         # Locate the translate-message element
         correct_message = page.get_by_test_id("correct-message")
@@ -209,43 +197,35 @@ async def test_query_fi() -> None:
 #     browser.close()
 
 
-# @pytest.mark.e2e
-# def test_query_perfect_en(playwright: Playwright) -> None:
-#     # Navigate and start quiz
-#     browser = playwright.chromium.launch(headless=True)
-#     context = browser.new_context()
-#     page = context.new_page()
+@pytest.mark.e2e
+async def test_query_perfect_en() -> None:
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context()
+        page = await context.new_page()
 
-#     # Navigate and start quiz
-#     page.goto("http://localhost:3000")
+        # Navigate and start quiz
+        await page.goto("http://localhost:3000")
+        await page.wait_for_load_state("networkidle")
 
-#     # Wait for page to load and verify Finnish text is visible
-#     welcome_message = page.get_by_test_id("welcome-message")
-#     expect(welcome_message).to_be_visible(timeout=10000)
+        # Click start quiz and wait for button to be ready
+        # await page.get_by_test_id("start-quiz-button").click()
+        await page.get_by_test_id("start-quiz-button").scroll_into_view_if_needed()
+        await page.get_by_test_id("start-quiz-button").click(force=True)
+        await page.wait_for_timeout(10000)
+        await page.wait_for_selector(
+            "[data-testid='answer1']", state="visible", timeout=20000
+        )
+        await page.get_by_test_id("answer1").fill("apple")
+        await page.get_by_test_id("answer1").press("Enter")
+        # Locate the translate-message element
+        correct_message = page.get_by_test_id("correct-message")
 
-#     # Click start quiz and wait for button to be ready
-#     start_button = page.get_by_test_id("start-quiz-button")
-#     expect(start_button).to_be_visible(timeout=10000)
-#     start_button.click()
+        # Expect it to be visible within 10 seconds
+        await expect(correct_message).to_be_visible(timeout=10000)
 
-#     translate_message = page.get_by_test_id("translate-message")
-#     expect(translate_message).to_be_visible(timeout=10000)
-
-#     answer_input = page.get_by_test_id("answer-input")
-#     expect(answer_input).to_be_visible(timeout=10000)
-
-#     answer_input.click()
-#     answer_input.fill("apple")
-
-#     submit_button = page.get_by_test_id("submit")
-#     expect(submit_button).to_be_visible(timeout=10000)
-#     submit_button.click()
-
-#     result_message = page.get_by_test_id("correct-message")
-#     expect(result_message).to_be_visible(timeout=10000)
-
-#     context.close()
-#     browser.close()
+        await context.close()
+        await browser.close()
 
 
 # @pytest.mark.e2e
