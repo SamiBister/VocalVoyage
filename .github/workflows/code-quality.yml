@@ -84,6 +84,8 @@ jobs:
       #       sleep 5
       #     done
       #     echo "Frontend server is up!"
+      - name: Set Environment Variables
+        run: echo "NEXT_PUBLIC_API_URL=http://localhost:3000" >> $GITHUB_ENV
 
       - name: Run Playwright Tests
         run: |

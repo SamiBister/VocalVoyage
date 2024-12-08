@@ -272,7 +272,7 @@ export default function Home() {
           height={100}
           className={styles.logo}
         />
-        <h1 className={styles.heading}>{t("welcome")}</h1>
+        <h1 data-testid="welcome-message"  className={styles.heading}>{t("welcome")}</h1>
       </div>
 
       {/* Language Selection Dropdown */}
@@ -321,7 +321,7 @@ export default function Home() {
 
       {!currentWord && totalAnswers === 0 ? (
         <div>
-          <button className={styles.button} onClick={startQuiz}>
+          <button data-testid="start-quiz-button" className={styles.button} onClick={startQuiz}>
             {t("start_quiz")}
           </button>
         </div>
@@ -337,6 +337,7 @@ export default function Home() {
                 })}
               </p>
               <input
+                data-testid="answer-input"
                 type="text"
                 className={styles.textInput}
                 value={userInput}
@@ -345,14 +346,15 @@ export default function Home() {
                 placeholder={currentWord.foreign_term}
                 ref={inputRef}
               />
-              <button className={styles.button} onClick={handleRepeatIncorrect}>
+              <button data-testid="submit" className={styles.button} onClick={handleRepeatIncorrect}>
                 {t("submit_answer")}
               </button>
             </div>
           ) : (
             <div>
-              <p>{`${t("translate")}: ${currentWord.native_translation}`}</p>
+              <p data-testid="translate-message">{`${t("translate")}: ${currentWord.native_translation}`}</p>
               <input
+                data-testid="answer-input"
                 type="text"
                 className={styles.textInput}
                 value={userInput}
@@ -360,7 +362,7 @@ export default function Home() {
                 onKeyDown={handleKeyDown}
                 ref={inputRef}
               />
-              <button className={styles.button} onClick={submitAnswer}>
+              <button data-testid="submit" className={styles.button} onClick={submitAnswer}>
                 {t("submit_answer")}
               </button>
               <button className={styles.button} onClick={endQuiz}>
@@ -372,7 +374,7 @@ export default function Home() {
       ) : totalAnswers > 0 && !currentWord ? (
         <div className={styles.resultSection}>
           <h2>{t("quiz_statistics")}</h2>
-          <p>{`${t("correct")}: ${stats.correct}`}</p>
+          <p data-testid="correct-message" >{`${t("correct")}: ${stats.correct}`}</p>
           <p>{`${t("incorrect")}: ${stats.incorrect}`}</p>
           <p>{`${t("score")}: ${correctPercentage.toFixed(2)}%`}</p>
           {resultImage && (

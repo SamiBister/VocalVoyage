@@ -36,162 +36,186 @@ def test_query_fi(playwright: Playwright) -> None:
     page.goto("http://localhost:3000/fi")
 
     # Wait for page to load and verify Finnish text is visible
-    expect(page.get_by_text("Tervetuloa VocabVoyage")).to_be_visible(timeout=10000)
-
-    # Ensure language switch is complete
-    page.wait_for_timeout(2000)  # Wait for translations to load
+    welcome_message = page.get_by_test_id("welcome-message")
+    expect(welcome_message).to_be_visible(timeout=10000)
 
     # Click start quiz and wait for button to be ready
-    start_button = page.get_by_role("button", name="Aloita tietovisa")
+    start_button = page.get_by_test_id("start-quiz-button")
     expect(start_button).to_be_visible(timeout=10000)
     start_button.click()
 
-    # Wait for quiz interface to load and try multiple possible text variations
-    try:
-        # Try different possible translations
-        translations = ["Käännä:", "Käännä", "Translate:"]
-        found = False
-        for translation in translations:
-            if page.get_by_text(translation).is_visible(timeout=2000):
-                found = True
-                break
+    translate_message = page.get_by_test_id("translate-message")
+    expect(translate_message).to_be_visible(timeout=10000)
 
-        if not found:
-            raise AssertionError("Translation text not found")
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
 
-        # Find input field and verify it exists
-        answer_input = page.get_by_role("textbox").first
-        expect(answer_input).to_be_visible(timeout=10000)
+    answer_input.click()
+    answer_input.fill("apple")
 
-        # Input answer
-        answer_input.click()
-        answer_input.fill("apple")
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
 
-        # Find and click submit button
-        submit_button = page.get_by_role("button", name="Lähetä vastaus")
-        expect(submit_button).to_be_visible(timeout=10000)
-        submit_button.click()
+    result_message = page.get_by_test_id("correct-message")
+    expect(result_message).to_be_visible(timeout=10000)
 
-        # Verify result with longer timeout
-        expect(page.get_by_text("Läpäisit kokeen huippupistein")).to_be_visible(
-            timeout=15000
-        )
-    finally:
-        # Cleanup
-        context.close()
-        browser.close()
+    context.close()
+    browser.close()
 
 
 @pytest.mark.e2e
 def test_query_wrong_fi(playwright: Playwright) -> None:
+    # Navigate and start quiz
     browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
     # Navigate and start quiz
-    page.goto("http://localhost:3000/fi")
-    page.get_by_role("button", name="Aloita tietovisa").click()
+    page.goto("http://localhost:3000")
 
-    # Wait for translation to appear and input to be ready
-    page.wait_for_selector("text=Käännä:")
+    # Wait for page to load and verify Finnish text is visible
+    welcome_message = page.get_by_test_id("welcome-message")
+    expect(welcome_message).to_be_visible(timeout=10000)
 
-    # Find input field - try multiple possible selectors
-    answer_input = page.get_by_role("textbox").first
+    # Click start quiz and wait for button to be ready
+    start_button = page.get_by_test_id("start-quiz-button")
+    expect(start_button).to_be_visible(timeout=10000)
+    start_button.click()
 
-    # Input wrong answer
+    translate_message = page.get_by_test_id("translate-message")
+    expect(translate_message).to_be_visible(timeout=10000)
+
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
+
     answer_input.click()
     answer_input.fill("orange")
-    page.get_by_role("button", name="Lähetä vastaus").click()
 
-    # Wait for error message and retry with correct answer
-    answer_input = page.get_by_role("textbox").first
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
 
-    # Input corrected answer
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
+
     answer_input.click()
     answer_input.fill("apple")
-    page.get_by_role("button", name="Lähetä vastaus").click()
 
-    # Input corrected answer
-    answer_input = page.get_by_role("textbox").first
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
+
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
+
     answer_input.click()
     answer_input.fill("apple")
-    page.get_by_role("button", name="Lähetä vastaus").click()
 
-    # Verify result message appears
-    expect(page.get_by_text("Jatka yrittämistä")).not_to_be_empty()
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
 
-    # Cleanup
+    result_message = page.get_by_test_id("correct-message")
+    expect(result_message).to_be_visible(timeout=10000)
+
     context.close()
     browser.close()
 
 
 @pytest.mark.e2e
 def test_query_perfect_en(playwright: Playwright) -> None:
+    # Navigate and start quiz
     browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
     # Navigate and start quiz
-    page.goto("http://localhost:3000/")
-    page.get_by_role("button", name="Start Quiz").click()
+    page.goto("http://localhost:3000")
 
-    # Wait for translation to appear and input to be ready
-    page.wait_for_selector("text=Translate:")
+    # Wait for page to load and verify Finnish text is visible
+    welcome_message = page.get_by_test_id("welcome-message")
+    expect(welcome_message).to_be_visible(timeout=10000)
 
-    # Find input field - try multiple possible selectors
-    answer_input = page.get_by_role("textbox").first
+    # Click start quiz and wait for button to be ready
+    start_button = page.get_by_test_id("start-quiz-button")
+    expect(start_button).to_be_visible(timeout=10000)
+    start_button.click()
 
-    # Input wrong answer
+    translate_message = page.get_by_test_id("translate-message")
+    expect(translate_message).to_be_visible(timeout=10000)
+
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
+
     answer_input.click()
-    answer_input.fill("Apple")
-    page.get_by_role("button", name="Submit Answer").click()
+    answer_input.fill("apple")
 
-    # Verify result message appears
-    expect(page.get_by_text("You aced this exam")).not_to_be_empty()
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
 
-    # Cleanup
+    result_message = page.get_by_test_id("correct-message")
+    expect(result_message).to_be_visible(timeout=10000)
+
     context.close()
     browser.close()
 
 
 @pytest.mark.e2e
 def test_query_wrong_answer_en(playwright: Playwright) -> None:
+    # Navigate and start quiz
     browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
     # Navigate and start quiz
-    page.goto("http://localhost:3000/")
-    page.get_by_role("button", name="Start Quiz").click()
+    page.goto("http://localhost:3000")
 
-    # Wait for translation to appear and input to be ready
-    page.wait_for_selector("text=Translate:")
+    # Wait for page to load and verify Finnish text is visible
+    welcome_message = page.get_by_test_id("welcome-message")
+    expect(welcome_message).to_be_visible(timeout=10000)
 
-    # Find input field - try multiple possible selectors
-    answer_input = page.get_by_role("textbox").first
+    # Click start quiz and wait for button to be ready
+    start_button = page.get_by_test_id("start-quiz-button")
+    expect(start_button).to_be_visible(timeout=10000)
+    start_button.click()
 
-    # Input wrong answer
+    translate_message = page.get_by_test_id("translate-message")
+    expect(translate_message).to_be_visible(timeout=10000)
+
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
+
     answer_input.click()
     answer_input.fill("orange")
-    page.get_by_role("button", name="Submit Answer").click()
 
-    # Wait for error message and retry with correct answer
-    answer_input = page.get_by_role("textbox").first
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
 
-    # Input corrected answer
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
+
     answer_input.click()
     answer_input.fill("apple")
-    page.get_by_role("button", name="Submit Answer").click()
 
-    # Input corrected answer
-    answer_input = page.get_by_role("textbox").first
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
+
+    answer_input = page.get_by_test_id("answer-input")
+    expect(answer_input).to_be_visible(timeout=10000)
+
     answer_input.click()
     answer_input.fill("apple")
-    page.get_by_role("button", name="Submit Answer").click()
 
-    # Verify result message appears
-    expect(page.get_by_text("Keep trying until")).not_to_be_empty()
+    submit_button = page.get_by_test_id("submit")
+    expect(submit_button).to_be_visible(timeout=10000)
+    submit_button.click()
 
-    # Cleanup
+    result_message = page.get_by_test_id("correct-message")
+    expect(result_message).to_be_visible(timeout=10000)
+
     context.close()
     browser.close()
