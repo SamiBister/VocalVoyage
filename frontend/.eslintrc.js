@@ -1,36 +1,23 @@
-// .eslintrc.js
 module.exports = {
-  parser: '@babel/eslint-parser',
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended'
-  ],
+  extends: ['next/core-web-vitals', 'plugin:react/recommended'],
   plugins: ['react'],
-  settings: {
-    react: {
-      version: 'detect'
-    }
-  },
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: 'module',
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ['next/babel']
+    },
     ecmaFeatures: {
       jsx: true
     }
   },
   rules: {
-    'react/react-in-jsx-scope': 'off', // For React 17+ new JSX transform
-    'no-unused-vars': ['error', { 
-      varsIgnorePattern: 'React' 
-    }]
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off'
   },
-  overrides: [
-    {
-      files: ['**/*.test.js', '**/*.test.jsx', '**/__tests__/**/*.{js,jsx}'],
-      rules: {
-        'no-unused-vars': 'off',
-        'react/react-in-jsx-scope': 'error' // Enforce React import in test files
-      }
+  settings: {
+    react: {
+      version: 'detect'
     }
-  ]
+  }
 };

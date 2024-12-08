@@ -1,12 +1,11 @@
-// babel.config.js
 module.exports = {
   presets: [
+    ['next/babel'],
     [
       '@babel/preset-react',
       {
-        runtime: 'automatic', // Adds the new JSX transform
-      },
-    ],
-    '@babel/preset-env',
-  ],
+        runtime: 'automatic'
+      }
+    ]
+  ]
 };

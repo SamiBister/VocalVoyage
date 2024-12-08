@@ -15,9 +15,10 @@ TestWordService Methods:
     test_increment_incorrect_repeat: Tests the increment_incorrect_repeat method.
 """
 
-import pytest
 import unittest
 from unittest.mock import MagicMock
+
+import pytest
 
 from app.domain.models import Word
 from app.interfaces.logger import QuizLogger

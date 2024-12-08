@@ -1,7 +1,8 @@
+import os
 import subprocess
 import time
+
 import pytest
-import os
 
 
 @pytest.fixture(scope="session", autouse=True)
