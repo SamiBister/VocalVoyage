@@ -337,7 +337,7 @@ export default function Home() {
                 })}
               </p>
               <input
-                data-testid="answer-input"
+                data-testid="answer2"
                 type="text"
                 className={styles.textInput}
                 value={userInput}
@@ -354,7 +354,7 @@ export default function Home() {
             <div>
               <p data-testid="translate-message">{`${t("translate")}: ${currentWord.native_translation}`}</p>
               <input
-                data-testid="answer-input"
+                data-testid="answer1"
                 type="text"
                 className={styles.textInput}
                 value={userInput}
@@ -362,7 +362,7 @@ export default function Home() {
                 onKeyDown={handleKeyDown}
                 ref={inputRef}
               />
-              <button data-testid="submit" className={styles.button} onClick={submitAnswer}>
+              <button data-testid="submit2" className={styles.button} onClick={submitAnswer}>
                 {t("submit_answer")}
               </button>
               <button className={styles.button} onClick={endQuiz}>
