@@ -4,7 +4,7 @@ from playwright.sync_api import Playwright, expect
 
 @pytest.mark.e2e
 def test_page_launch(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
     page.goto("http://localhost:3000/")
@@ -16,7 +16,7 @@ def test_page_launch(playwright: Playwright) -> None:
 
 @pytest.mark.e2e
 def test_page_launch_fi(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
     page.goto("http://localhost:3000/fi")
@@ -28,7 +28,7 @@ def test_page_launch_fi(playwright: Playwright) -> None:
 
 @pytest.mark.e2e
 def test_query_fi(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
@@ -57,7 +57,7 @@ def test_query_fi(playwright: Playwright) -> None:
 
 @pytest.mark.e2e
 def test_query_wrong_fi(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
@@ -100,7 +100,7 @@ def test_query_wrong_fi(playwright: Playwright) -> None:
 
 @pytest.mark.e2e
 def test_query_perfect_en(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
@@ -129,7 +129,7 @@ def test_query_perfect_en(playwright: Playwright) -> None:
 
 @pytest.mark.e2e
 def test_query_wrong_answer_en(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
 
