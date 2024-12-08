@@ -57,12 +57,18 @@ async def test_query_fi() -> None:
         print(await page.content())
         page.on("console", lambda msg: print("PAGE CONSOLE:", msg.text))
         page.on("pageerror", lambda exc: print("PAGE ERROR:", exc))
+
         await page.wait_for_selector("input", timeout=20000)
-        print(await page.content())
-        await page.wait_for_selector(
-            "[data-testid='answer-input']", state="visible", timeout=20000
+        page.on(
+            "requestfailed",
+            lambda request: print("REQUEST FAILED:", request.url, request.failure),
         )
-        answer_input = page.locator("[data-testid='answer-input']")
+        page.on(
+            "response",
+            lambda response: print("RESPONSE:", response.url, response.status),
+        )
+        print(await page.content())
+        answer_input = page.locator("input")
 
         await answer_input.wait_for(state="visible")
         await answer_input.fill("apple")
