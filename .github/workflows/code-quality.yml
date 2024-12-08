@@ -81,9 +81,15 @@ jobs:
       - name: Set Environment Variables
         run: echo "NEXT_PUBLIC_API_URL=http://localhost:8000" >> $GITHUB_ENV
 
+      - name: Clean previous artifacts
+        run: rm -rf test-artifacts
+
       - name: Start Frontend Server
         run: |
           cd frontend
+          cp .env.template .env.local
+          cat .env.local
+          export NEXT_PUBLIC_API_URL=http://localhost:8000
           npm run start -- --hostname 0.0.0.0 &
           echo $! > ../frontend_pid.txt
       # - name: Start Frontend Server
@@ -123,6 +129,7 @@ jobs:
         with:
           name: test-artifacts
           path: test-artifacts/
+          retention-days: 1
 
   build:
     runs-on: [ubuntu-latest]
