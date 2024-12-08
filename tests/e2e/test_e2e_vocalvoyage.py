@@ -34,35 +34,6 @@ def test_query_fi(playwright: Playwright) -> None:
 
     # Navigate and start quiz
     page.goto("http://localhost:3000/fi")
-    page.get_by_role("button", name="Aloita tietovisa").click()
-
-    # Wait for translation to appear and input to be ready
-    page.wait_for_selector("text=Käännä:")
-
-    # Find input field - try multiple possible selectors
-    answer_input = page.get_by_role("textbox").first
-
-    # Input wrong answer
-    answer_input.click()
-    answer_input.fill("apple")
-    page.get_by_role("button", name="Lähetä vastaus").click()
-
-    # Verify result message appears
-    expect(page.get_by_text("Läpäisit kokeen huippupistein")).not_to_be_empty()
-
-    # Cleanup
-    context.close()
-    browser.close()
-
-
-@pytest.mark.e2e
-def test_query_fi(playwright: Playwright) -> None:
-    browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context()
-    page = context.new_page()
-
-    # Navigate and start quiz
-    page.goto("http://localhost:3000/fi")
 
     # Wait for page to load and verify Finnish text is visible
     expect(page.get_by_text("Tervetuloa VocabVoyage")).to_be_visible(timeout=10000)
@@ -109,6 +80,49 @@ def test_query_fi(playwright: Playwright) -> None:
         # Cleanup
         context.close()
         browser.close()
+
+
+@pytest.mark.e2e
+def test_query_wrong_fi(playwright: Playwright) -> None:
+    browser = playwright.chromium.launch(headless=True)
+    context = browser.new_context()
+    page = context.new_page()
+
+    # Navigate and start quiz
+    page.goto("http://localhost:3000/fi")
+    page.get_by_role("button", name="Aloita tietovisa").click()
+
+    # Wait for translation to appear and input to be ready
+    page.wait_for_selector("text=Käännä:")
+
+    # Find input field - try multiple possible selectors
+    answer_input = page.get_by_role("textbox").first
+
+    # Input wrong answer
+    answer_input.click()
+    answer_input.fill("orange")
+    page.get_by_role("button", name="Lähetä vastaus").click()
+
+    # Wait for error message and retry with correct answer
+    answer_input = page.get_by_role("textbox").first
+
+    # Input corrected answer
+    answer_input.click()
+    answer_input.fill("apple")
+    page.get_by_role("button", name="Lähetä vastaus").click()
+
+    # Input corrected answer
+    answer_input = page.get_by_role("textbox").first
+    answer_input.click()
+    answer_input.fill("apple")
+    page.get_by_role("button", name="Lähetä vastaus").click()
+
+    # Verify result message appears
+    expect(page.get_by_text("Jatka yrittämistä")).not_to_be_empty()
+
+    # Cleanup
+    context.close()
+    browser.close()
 
 
 @pytest.mark.e2e
