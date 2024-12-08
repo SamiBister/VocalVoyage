@@ -48,10 +48,16 @@ async def test_query_fi() -> None:
         await page.wait_for_load_state("networkidle")
 
         # Click start quiz and wait for button to be ready
-        await page.get_by_test_id("start-quiz-button").click()
-        await page.wait_for_timeout(10000)
+        # await page.get_by_test_id("start-quiz-button").click()
+        await page.get_by_test_id("start-quiz-button").scroll_into_view_if_needed()
+        await page.get_by_test_id("start-quiz-button").click(force=True)
+        # await page.wait_for_timeout(10000)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_{timestamp}.png"))
+        print(await page.content())
+        page.on("console", lambda msg: print("PAGE CONSOLE:", msg.text))
+        page.on("pageerror", lambda exc: print("PAGE ERROR:", exc))
+        await page.wait_for_selector("input", timeout=20000)
         print(await page.content())
         await page.wait_for_selector(
             "[data-testid='answer-input']", state="visible", timeout=20000
