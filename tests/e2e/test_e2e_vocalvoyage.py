@@ -65,6 +65,54 @@ def test_query_fi(playwright: Playwright) -> None:
 
 
 @pytest.mark.e2e
+def test_degug_fi(playwright: Playwright) -> None:
+    browser = playwright.chromium.launch(headless=True)
+    context = browser.new_context()
+    page = context.new_page()
+
+    try:
+        # Navigate and start quiz
+        page.goto("http://localhost:3000/fi")
+
+        # Wait for page load
+        page.wait_for_load_state("networkidle")
+
+        # Debug: Print button state
+        start_button = page.get_by_test_id("start-quiz-button")
+        print(f"Button visible: {start_button.is_visible()}")
+        print(f"Button enabled: {start_button.is_enabled()}")
+
+        # Wait and verify button is ready
+        expect(start_button).to_be_visible(timeout=10000)
+        expect(start_button).to_be_enabled(timeout=10000)
+
+        # Force wait to ensure UI is stable
+        page.wait_for_timeout(1000)
+
+        # Click with retry logic
+        try:
+            start_button.click(timeout=5000)
+        except Exception as e:
+            # Take debug screenshot
+            page.screenshot(path="button-click-failed.png")
+            print(f"Click failed: {str(e)}")
+            print(f"Page content: {page.content()}")
+            raise
+
+        # Verify click worked by checking for next element
+        translate_message = page.get_by_test_id("translate-message")
+        expect(translate_message).to_be_visible(timeout=10000)
+
+    except Exception:
+        # Take failure screenshot
+        page.screenshot(path=f"test-failure-{datetime.now().timestamp()}.png")
+        raise
+    finally:
+        context.close()
+        browser.close()
+
+
+@pytest.mark.e2e
 def test_query_wrong_fi(playwright: Playwright) -> None:
     # Navigate and start quiz
     browser = playwright.chromium.launch(headless=True)

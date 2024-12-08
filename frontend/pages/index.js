@@ -399,7 +399,7 @@ export default function Home() {
               </ul>
             </>
           )}
-          <button className={styles.button} onClick={startQuiz}>
+          <button data-testid="start-quiz-button" className={styles.button} onClick={startQuiz}>
             {t("start_new_quiz")}
           </button>
         </div>
