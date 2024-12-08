@@ -81,9 +81,6 @@ def test_degug_fi(playwright: Playwright) -> None:
         # Navigate and start quiz
         page.goto("http://localhost:3000/fi")
 
-        # Wait for page load
-        page.wait_for_load_state("networkidle")
-
         # Debug: Print button state
         start_button = page.get_by_test_id("start-quiz-button")
         print(f"Button visible: {start_button.is_visible()}")
