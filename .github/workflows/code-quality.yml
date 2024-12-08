@@ -78,6 +78,8 @@ jobs:
           cd frontend
           cp .env.template .env.local
           cat .env.local
+      - name: Set Environment Variables
+        run: echo "NEXT_PUBLIC_API_URL=http://localhost:8000" >> $GITHUB_ENV
 
       - name: Start Frontend Server
         run: |

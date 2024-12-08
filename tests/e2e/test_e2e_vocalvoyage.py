@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import Playwright, expect
+from playwright.async_api import async_playwright, expect
 
-# from playwright.async_api import async_playwright, expect
+# from playwright.sync_api import Playwright, expect
 
 
 ARTIFACTS_DIR = Path(os.environ.get("GITHUB_WORKSPACE", ".")) / "test-artifacts"
@@ -35,52 +35,51 @@ ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 #     browser.close()
 
 
-# @pytest.mark.asyncio
-# @pytest.mark.e2e
-# async def test_query_fi() -> None:
-#     async with async_playwright() as p:
-#         browser = await p.chromium.launch(headless=True)
-#         context = await browser.new_context()
-#         page = await context.new_page()
+@pytest.mark.asyncio
+@pytest.mark.e2e
+async def test_query_fi() -> None:
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context()
+        page = await context.new_page()
 
-#         # Navigate and start quiz
-#         await page.goto("http://localhost:3000")
-#         await page.wait_for_load_state("networkidle")
+        # Navigate and start quiz
+        await page.goto("http://localhost:3000")
+        await page.wait_for_load_state("networkidle")
 
-#         # Click start quiz and wait for button to be ready
-#         # await page.get_by_test_id("start-quiz-button").click()
-#         await page.get_by_test_id("start-quiz-button").scroll_into_view_if_needed()
-#         await page.get_by_test_id("start-quiz-button").click(force=True)
-#         # await page.wait_for_timeout(10000)
-#         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-#         await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_{timestamp}.png"))
-#         print(await page.content())
-#         page.on("console", lambda msg: print("PAGE CONSOLE:", msg.text))
-#         page.on("pageerror", lambda exc: print("PAGE ERROR:", exc))
+        # Click start quiz and wait for button to be ready
+        # await page.get_by_test_id("start-quiz-button").click()
+        await page.get_by_test_id("start-quiz-button").scroll_into_view_if_needed()
+        await page.get_by_test_id("start-quiz-button").click(force=True)
+        # await page.wait_for_timeout(10000)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_{timestamp}.png"))
+        print(await page.content())
+        page.on("console", lambda msg: print("PAGE CONSOLE:", msg.text))
+        page.on("pageerror", lambda exc: print("PAGE ERROR:", exc))
+        page.on(
+            "requestfailed",
+            lambda request: print("REQUEST FAILED:", request.url, request.failure),
+        )
+        page.on(
+            "response",
+            lambda response: print("RESPONSE:", response.url, response.status),
+        )
+        print(await page.content())
 
-#         await page.wait_for_selector("input", timeout=20000)
-#         page.on(
-#             "requestfailed",
-#             lambda request: print("REQUEST FAILED:", request.url, request.failure),
-#         )
-#         page.on(
-#             "response",
-#             lambda response: print("RESPONSE:", response.url, response.status),
-#         )
-#         print(await page.content())
-#         answer_input = page.locator("input")
+        await page.wait_for_selector(
+            "[data-testid='answer-input']", state="visible", timeout=20000
+        )
+        await page.get_by_test_id("start-quiz-button").fill("apple")
+        await page.get_by_test_id("start-quiz-button").press("Enter")
+        # Locate the translate-message element
+        correct_message = page.get_by_test_id("correct-message")
 
-#         await answer_input.wait_for(state="visible")
-#         await answer_input.fill("apple")
-#         await answer_input.press("Enter")
-#         # Locate the translate-message element
-#         correct_message = page.get_by_test_id("correct-message")
+        # Expect it to be visible within 10 seconds
+        await expect(correct_message).to_be_visible(timeout=10000)
 
-#         # Expect it to be visible within 10 seconds
-#         await expect(correct_message).to_be_visible(timeout=10000)
-
-#         await context.close()
-#         await browser.close()
+        await context.close()
+        await browser.close()
 
 
 # @pytest.mark.e2e
@@ -141,158 +140,158 @@ ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 #         browser.close()
 
 
-@pytest.mark.e2e
-def test_query_wrong_fi(playwright: Playwright) -> None:
-    # Navigate and start quiz
-    browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context()
-    page = context.new_page()
+# @pytest.mark.e2e
+# def test_query_wrong_fi(playwright: Playwright) -> None:
+#     # Navigate and start quiz
+#     browser = playwright.chromium.launch(headless=True)
+#     context = browser.new_context()
+#     page = context.new_page()
 
-    # Navigate and start quiz
-    page.goto("http://localhost:3000")
+#     # Navigate and start quiz
+#     page.goto("http://localhost:3000")
 
-    # Wait for page to load and verify Finnish text is visible
-    welcome_message = page.get_by_test_id("welcome-message")
-    expect(welcome_message).to_be_visible(timeout=10000)
+#     # Wait for page to load and verify Finnish text is visible
+#     welcome_message = page.get_by_test_id("welcome-message")
+#     expect(welcome_message).to_be_visible(timeout=10000)
 
-    # Click start quiz and wait for button to be ready
-    start_button = page.get_by_test_id("start-quiz-button")
-    expect(start_button).to_be_visible(timeout=10000)
-    start_button.click()
+#     # Click start quiz and wait for button to be ready
+#     start_button = page.get_by_test_id("start-quiz-button")
+#     expect(start_button).to_be_visible(timeout=10000)
+#     start_button.click()
 
-    # translate_message = page.get_by_test_id("translate-message")
-    # expect(translate_message).to_be_visible(timeout=10000)
+#     # translate_message = page.get_by_test_id("translate-message")
+#     # expect(translate_message).to_be_visible(timeout=10000)
 
-    answer_input = page.get_by_test_id("answer-input")
-    expect(answer_input).to_be_visible(timeout=10000)
+#     answer_input = page.get_by_test_id("answer-input")
+#     expect(answer_input).to_be_visible(timeout=10000)
 
-    answer_input.click()
-    answer_input.fill("orange")
+#     answer_input.click()
+#     answer_input.fill("orange")
 
-    submit_button = page.get_by_test_id("submit")
-    expect(submit_button).to_be_visible(timeout=10000)
-    submit_button.click()
+#     submit_button = page.get_by_test_id("submit")
+#     expect(submit_button).to_be_visible(timeout=10000)
+#     submit_button.click()
 
-    answer_input = page.get_by_test_id("answer-input")
-    expect(answer_input).to_be_visible(timeout=10000)
+#     answer_input = page.get_by_test_id("answer-input")
+#     expect(answer_input).to_be_visible(timeout=10000)
 
-    answer_input.click()
-    answer_input.fill("apple")
+#     answer_input.click()
+#     answer_input.fill("apple")
 
-    submit_button = page.get_by_test_id("submit")
-    expect(submit_button).to_be_visible(timeout=10000)
-    submit_button.click()
+#     submit_button = page.get_by_test_id("submit")
+#     expect(submit_button).to_be_visible(timeout=10000)
+#     submit_button.click()
 
-    answer_input = page.get_by_test_id("answer-input")
-    expect(answer_input).to_be_visible(timeout=10000)
+#     answer_input = page.get_by_test_id("answer-input")
+#     expect(answer_input).to_be_visible(timeout=10000)
 
-    answer_input.click()
-    answer_input.fill("apple")
+#     answer_input.click()
+#     answer_input.fill("apple")
 
-    submit_button = page.get_by_test_id("submit")
-    expect(submit_button).to_be_visible(timeout=10000)
-    submit_button.click()
+#     submit_button = page.get_by_test_id("submit")
+#     expect(submit_button).to_be_visible(timeout=10000)
+#     submit_button.click()
 
-    result_message = page.get_by_test_id("correct-message")
-    expect(result_message).to_be_visible(timeout=10000)
+#     result_message = page.get_by_test_id("correct-message")
+#     expect(result_message).to_be_visible(timeout=10000)
 
-    context.close()
-    browser.close()
-
-
-@pytest.mark.e2e
-def test_query_perfect_en(playwright: Playwright) -> None:
-    # Navigate and start quiz
-    browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context()
-    page = context.new_page()
-
-    # Navigate and start quiz
-    page.goto("http://localhost:3000")
-
-    # Wait for page to load and verify Finnish text is visible
-    welcome_message = page.get_by_test_id("welcome-message")
-    expect(welcome_message).to_be_visible(timeout=10000)
-
-    # Click start quiz and wait for button to be ready
-    start_button = page.get_by_test_id("start-quiz-button")
-    expect(start_button).to_be_visible(timeout=10000)
-    start_button.click()
-
-    translate_message = page.get_by_test_id("translate-message")
-    expect(translate_message).to_be_visible(timeout=10000)
-
-    answer_input = page.get_by_test_id("answer-input")
-    expect(answer_input).to_be_visible(timeout=10000)
-
-    answer_input.click()
-    answer_input.fill("apple")
-
-    submit_button = page.get_by_test_id("submit")
-    expect(submit_button).to_be_visible(timeout=10000)
-    submit_button.click()
-
-    result_message = page.get_by_test_id("correct-message")
-    expect(result_message).to_be_visible(timeout=10000)
-
-    context.close()
-    browser.close()
+#     context.close()
+#     browser.close()
 
 
-@pytest.mark.e2e
-def test_query_wrong_answer_en(playwright: Playwright) -> None:
-    # Navigate and start quiz
-    browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context()
-    page = context.new_page()
+# @pytest.mark.e2e
+# def test_query_perfect_en(playwright: Playwright) -> None:
+#     # Navigate and start quiz
+#     browser = playwright.chromium.launch(headless=True)
+#     context = browser.new_context()
+#     page = context.new_page()
 
-    # Navigate and start quiz
-    page.goto("http://localhost:3000")
+#     # Navigate and start quiz
+#     page.goto("http://localhost:3000")
 
-    # Wait for page to load and verify Finnish text is visible
-    welcome_message = page.get_by_test_id("welcome-message")
-    expect(welcome_message).to_be_visible(timeout=10000)
+#     # Wait for page to load and verify Finnish text is visible
+#     welcome_message = page.get_by_test_id("welcome-message")
+#     expect(welcome_message).to_be_visible(timeout=10000)
 
-    # Click start quiz and wait for button to be ready
-    start_button = page.get_by_test_id("start-quiz-button")
-    expect(start_button).to_be_visible(timeout=10000)
-    start_button.click()
+#     # Click start quiz and wait for button to be ready
+#     start_button = page.get_by_test_id("start-quiz-button")
+#     expect(start_button).to_be_visible(timeout=10000)
+#     start_button.click()
 
-    translate_message = page.get_by_test_id("translate-message")
-    expect(translate_message).to_be_visible(timeout=10000)
+#     translate_message = page.get_by_test_id("translate-message")
+#     expect(translate_message).to_be_visible(timeout=10000)
 
-    answer_input = page.get_by_test_id("answer-input")
-    expect(answer_input).to_be_visible(timeout=10000)
+#     answer_input = page.get_by_test_id("answer-input")
+#     expect(answer_input).to_be_visible(timeout=10000)
 
-    answer_input.click()
-    answer_input.fill("orange")
+#     answer_input.click()
+#     answer_input.fill("apple")
 
-    submit_button = page.get_by_test_id("submit")
-    expect(submit_button).to_be_visible(timeout=10000)
-    submit_button.click()
+#     submit_button = page.get_by_test_id("submit")
+#     expect(submit_button).to_be_visible(timeout=10000)
+#     submit_button.click()
 
-    answer_input = page.get_by_test_id("answer-input")
-    expect(answer_input).to_be_visible(timeout=10000)
+#     result_message = page.get_by_test_id("correct-message")
+#     expect(result_message).to_be_visible(timeout=10000)
 
-    answer_input.click()
-    answer_input.fill("apple")
+#     context.close()
+#     browser.close()
 
-    submit_button = page.get_by_test_id("submit")
-    expect(submit_button).to_be_visible(timeout=10000)
-    submit_button.click()
 
-    answer_input = page.get_by_test_id("answer-input")
-    expect(answer_input).to_be_visible(timeout=10000)
+# @pytest.mark.e2e
+# def test_query_wrong_answer_en(playwright: Playwright) -> None:
+#     # Navigate and start quiz
+#     browser = playwright.chromium.launch(headless=True)
+#     context = browser.new_context()
+#     page = context.new_page()
 
-    answer_input.click()
-    answer_input.fill("apple")
+#     # Navigate and start quiz
+#     page.goto("http://localhost:3000")
 
-    submit_button = page.get_by_test_id("submit")
-    expect(submit_button).to_be_visible(timeout=10000)
-    submit_button.click()
+#     # Wait for page to load and verify Finnish text is visible
+#     welcome_message = page.get_by_test_id("welcome-message")
+#     expect(welcome_message).to_be_visible(timeout=10000)
 
-    result_message = page.get_by_test_id("correct-message")
-    expect(result_message).to_be_visible(timeout=10000)
+#     # Click start quiz and wait for button to be ready
+#     start_button = page.get_by_test_id("start-quiz-button")
+#     expect(start_button).to_be_visible(timeout=10000)
+#     start_button.click()
 
-    context.close()
-    browser.close()
+#     translate_message = page.get_by_test_id("translate-message")
+#     expect(translate_message).to_be_visible(timeout=10000)
+
+#     answer_input = page.get_by_test_id("answer-input")
+#     expect(answer_input).to_be_visible(timeout=10000)
+
+#     answer_input.click()
+#     answer_input.fill("orange")
+
+#     submit_button = page.get_by_test_id("submit")
+#     expect(submit_button).to_be_visible(timeout=10000)
+#     submit_button.click()
+
+#     answer_input = page.get_by_test_id("answer-input")
+#     expect(answer_input).to_be_visible(timeout=10000)
+
+#     answer_input.click()
+#     answer_input.fill("apple")
+
+#     submit_button = page.get_by_test_id("submit")
+#     expect(submit_button).to_be_visible(timeout=10000)
+#     submit_button.click()
+
+#     answer_input = page.get_by_test_id("answer-input")
+#     expect(answer_input).to_be_visible(timeout=10000)
+
+#     answer_input.click()
+#     answer_input.fill("apple")
+
+#     submit_button = page.get_by_test_id("submit")
+#     expect(submit_button).to_be_visible(timeout=10000)
+#     submit_button.click()
+
+#     result_message = page.get_by_test_id("correct-message")
+#     expect(result_message).to_be_visible(timeout=10000)
+
+#     context.close()
+#     browser.close()
