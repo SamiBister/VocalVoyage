@@ -66,18 +66,20 @@ jobs:
         run: |
           uv run uvicorn app.main:app --reload &
           echo $! > backend_pid.txt
-
-      # - name: Start Frontend Server
-      #   run: |
-      #     cd frontend
-      #     npm run start -- --hostname 0.0.0.0 &
-      #     echo $! > ../frontend_pid.txt
+      - name: Set Environment Variables
+        run: echo "NEXT_PUBLIC_API_URL=http://localhost:8000" >> $GITHUB_ENV
 
       - name: Start Frontend Server
         run: |
           cd frontend
-          npm run dev &
+          npm run start -- --hostname 0.0.0.0 &
           echo $! > ../frontend_pid.txt
+
+      # - name: Start Frontend Server
+      #   run: |
+      #     cd frontend
+      #     npm run dev &
+      #     echo $! > ../frontend_pid.txt
 
       - name: Wait for Backend to Start
         run: |
@@ -87,6 +89,9 @@ jobs:
           done
           echo "Backend server is up!"
 
+      - name: Set Environment Variables
+        run: echo "NEXT_PUBLIC_API_URL=http://localhost:8000" >> $GITHUB_ENV
+
       - name: Wait for Frontend to Start
         run: |
           until curl -s http://localhost:3000/; do
@@ -94,9 +99,6 @@ jobs:
             sleep 5
           done
           echo "Frontend server is up!"
-
-      - name: Set Environment Variables
-        run: echo "NEXT_PUBLIC_API_URL=http://localhost:3000" >> $GITHUB_ENV
 
       - name: Run Playwright Tests
         run: |
