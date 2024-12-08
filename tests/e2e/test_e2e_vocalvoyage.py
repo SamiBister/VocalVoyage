@@ -38,7 +38,7 @@ ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 @pytest.mark.e2e
 async def test_query_fi() -> None:
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False, slow_mo=500)
+        browser = await p.chromium.launch(headless=True)
         context = await browser.new_context()
         page = await context.new_page()
 
