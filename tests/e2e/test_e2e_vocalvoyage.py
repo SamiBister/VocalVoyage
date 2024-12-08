@@ -52,6 +52,7 @@ async def test_query_fi() -> None:
         await page.wait_for_timeout(10000)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_{timestamp}.png"))
+        print(await page.content())
         await page.wait_for_selector(
             "[data-testid='answer-input']", state="visible", timeout=20000
         )
