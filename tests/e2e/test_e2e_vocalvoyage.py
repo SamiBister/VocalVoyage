@@ -44,6 +44,19 @@ async def test_query_fi() -> None:
         context = await browser.new_context()
         page = await context.new_page()
 
+        # Register event listeners before navigation
+        async def log_response(response):
+            print(
+                f"RESPONSE: URL={response.url}, Status={response.status}, "
+                f"Headers={await response.all_headers()}"
+            )
+
+        async def log_request_failed(request):
+            print(
+                f"REQUEST FAILED: URL={request.url}, "
+                f"Failure={request.failure}, Method={request.method}"
+            )
+
         # Navigate and start quiz
         await page.goto("http://localhost:3000")
         await page.wait_for_load_state("networkidle")
@@ -56,21 +69,15 @@ async def test_query_fi() -> None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         await page.screenshot(path=str(ARTIFACTS_DIR / f"after_click_y{timestamp}.png"))
         # print(await page.content())
-        page.on("console", lambda msg: print("PAGE CONSOLE:", msg.text))
-        page.on("pageerror", lambda exc: print("PAGE ERROR:", exc))
-        page.on(
-            "requestfailed",
-            lambda request: print("REQUEST FAILED:", request.url, request.failure),
-        )
-        page.on(
-            "response",
-            lambda response: print("RESPONSE:", response.url, response.status),
-        )
+        page.on("console", lambda msg: print(f"CONSOLE: {msg.text}"))
+        page.on("pageerror", lambda exc: print(f"PAGE ERROR: {exc}"))
+        page.on("requestfailed", log_request_failed)
+        page.on("response", log_response)
         # print(await page.content())
 
-        # await page.wait_for_selector(
-        #     "[data-testid='answer-input']", state="visible", timeout=20000
-        # )
+        await page.wait_for_selector(
+            "[data-testid='answer1']", state="visible", timeout=20000
+        )
         await page.get_by_test_id("answer1").fill("apple")
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         await page.screenshot(path=str(ARTIFACTS_DIR / f"after_fill_{timestamp}.png"))

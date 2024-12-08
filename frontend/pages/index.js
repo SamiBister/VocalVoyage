@@ -6,12 +6,13 @@
  * @component
  */
 
-import { useState, useEffect, useRef } from "react";
-import useTranslation from "next-translate/useTranslation";
-import setLanguage from "next-translate/setLanguage";
 import axios from "axios";
+import setLanguage from "next-translate/setLanguage";
+import useTranslation from "next-translate/useTranslation";
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { API_URL } from '../config/constants';
 import styles from "../styles/Home.module.css";
 
 /**
@@ -36,6 +37,7 @@ export default function Home() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadMessage, setUploadMessage] = useState("");
 
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -47,10 +49,10 @@ export default function Home() {
    * @async
    */
   const startQuiz = async () => {
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/set_mode/`, {
+    await axios.post(`${API_URL}/set_mode/`, {
       mode,
     });
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/start_quiz/`);
+    await axios.post(`${API_URL}/start_quiz/`);
     fetchNextWord();
   };
 
@@ -59,9 +61,9 @@ export default function Home() {
    * @async
    */
   const endQuiz = async () => {
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/end_quiz/`);
+    await axios.post(`${API_URL}/end_quiz/`);
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/results/`,
+      `${API_URL}/results/`,
     );
     setStats(response.data);
     setCurrentWord(null);
@@ -74,7 +76,7 @@ export default function Home() {
   const fetchNextWord = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/words/next`,
+        `${API_URL}/words/next`,
       );
       if (response.data !== null) {
         setCurrentWord(response.data);
@@ -99,7 +101,7 @@ export default function Home() {
     if (!currentWord) return;
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/check/`,
+      `${API_URL}/check/`,
       {
         word: currentWord,
         user_input: userInput,
@@ -200,7 +202,7 @@ export default function Home() {
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/upload_words/`,
+        `${API_URL}/upload_words/`,
         formData,
         {
           headers: {
