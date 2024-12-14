@@ -1,7 +1,26 @@
-// frontend/next.config.js
-
 const nextTranslate = require("next-translate");
 
-module.exports = nextTranslate({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-});
+  experimental: {
+    forceSwcTransforms: true
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.devtool = 'source-map';
+    }
+    return config;
+  },
+  // Configure logging properly
+  logging: {
+    fetches: {
+      fullUrl: false
+    }
+  },
+  // Preserve distDir and translation settings
+  distDir: '.next',
+  ...nextTranslate()
+};
+
+module.exports = nextConfig;

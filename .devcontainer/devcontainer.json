@@ -1,0 +1,37 @@
+{
+    "name": "Next.js Dev Container",
+    // "dockerFile": "Dockerfile",
+    // "platform": "linux/amd64",
+    // "context": "..",
+    "build": {
+        "context": "..",
+        "dockerfile": "Dockerfile",
+        "options": [
+            "--platform=linux/amd64"
+        ]
+    },
+    "forwardPorts": [
+        3000,
+        8000
+    ],
+    // "postCreateCommand": "npm run dev",
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind"
+    ],
+    "workspaceFolder": "/workspace",
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "fish",
+        "editor.formatOnSave": true
+    },
+    "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-next",
+        "ms-python.python",
+        "ms-playwright.playwright",
+        "neovim.neovim"
+    ],
+    "postCreateCommand": "uv sync && uv run playwright install --with-deps chromium",
+    //"postCreateCommand": "uv sync && uv run playwright install && uv run playwright install-deps",
+    "remoteUser": "node"
+}

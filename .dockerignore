@@ -1,0 +1,65 @@
+# Git files
+.git
+.gitignore
+
+# Docker files
+.dockerignore
+Dockerfile
+
+# Development environment files
+.devcontainer/
+.vscode/
+.idea/
+*.code-workspace
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+ENV/
+
+# Test artifacts and coverage reports
+.pytest_cache/
+.ruff_cache/
+test-artifacts/
+coverage.*
+.coverage
+coverage.xml
+
+# Node.js modules and logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+build/
+dist/
+frontend/.next/
+frontend/build/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# Documentation and markdown files
+docs/
+*.md
+
+# Lock files
+*.lock
+
+# Exclude frontend dependencies
+frontend/node_modules/

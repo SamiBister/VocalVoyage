@@ -6,15 +6,20 @@ VocabVoyage is a language learning application designed to help kids learn vocab
 
 This was developed to provide learning app for my daughter, The Girl.
 
-As secondary purpose this is POC for following things:
+As secondary purpose this is showcase for tech that I find useful and improve development experience.
 
 - UV for managing python dependencies and virtualenv.
   - UV tooling for the pipelines
+  - Ruff for linting and formatting
+  - Github actions for CI/CD with UV and Ruff
 - FastAPI for backend
 - NextJS for frontend
 - Clean code structure for the python backend
 - ChatGPT generated boilerplate.
 - Test fully automated document generation
+- Playwright for end-to-end testing
+- Devlopment container for consistent development environment
+  - Add tmux and neovim for development container, to enable nvim development inside tmux
 
 ## Features
 
@@ -47,10 +52,13 @@ VocabVoyage/
 
 ### Prerequisites
 
-- **UV** for python
-- **Node.js** and **npm**
+- **Git**
+- **Docker**
+- **Visual Studio Code** with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) or **JetBrains IDE** with DevContainer support
 
-### Backend Setup
+### Preferred Development Setup
+
+We recommend using DevContainers for development to ensure a consistent and isolated environment across all contributors.
 
 1. **Clone the Repository**
 
@@ -59,20 +67,122 @@ VocabVoyage/
    cd VocabVoyage
    ```
 
-2. **Set Up Virtual Environment**
+2. **Open with DevContainer**
+
+- VS Code:
+  - Install the Dev Containers extension.
+  - Open the project folder in VS Code.
+  - When prompted, reopen the folder in the container.
+- JetBrains IDE:
+  - Install JetBrains Gateway:
+    - Install JetBrains Gateway (if you don’t have a full IDE installed) from JetBrains Gateway.
+    - Enable Remote Development:
+  - Open your JetBrains IDE or Gateway.
+    - Connect to the Docker-based DevContainer by following the JetBrains Docker Setup Guide.
+  - Start Developing
+
+#### Developement with nvim and tmux
+
+##### Plan
+
+1, Build the dev container image 2. Run container with workspace mount 3. Connect to container 4. Start tmux session
+5, Use neovim inside tmux
+
+##### Steps
+
+1. Build image:
+
+```bash
+```bash
+docker build --platform linux/amd64 -t devenv -f .devcontainer/Dockerfile .
+```
+
+```
+
+
+2. Run container:
+
+```bash
+docker run -it --rm \
+  --name dev_session \
+  -v $(pwd):/workspace \
+  -w /workspace \
+  -p 3000:3000 \
+  -p 8000:8000 \
+  devenv \
+  fish
+```
+
+3. Initialize the workspace:
+
+```bash
+uv sync && uv run playwright install --with-deps chromium
+```
+
+4. Start tmux session:
+
+```bash
+tmux new-session -s dev
+```
+
+5. Use neovim inside tmux:
+
+```bash
+cd workspace
+nvim .
+```
+
+6. Common tmux/nvim commands:
+
+```bash
+# Inside tmux:
+Ctrl+b c     # new window
+Ctrl+b "     # split horizontal
+Ctrl+b %     # split vertical
+Ctrl+b [0-9] # switch window
+nvim .       # open neovim in current directory
+```
+
+Remember:
+
+Ctrl+b is tmux prefix
+Ctrl+b d detaches from tmux session
+tmux attach -t dev reattaches to session
+
+### Alternative Setup
+
+If you choose not to use DevContainers, ensure you have UV for Python, Node.js, and npm installed. Follow the manual setup instructions for the
+
+#### Prerequisites
+
+- **UV** for python
+- **Node.js** and **npm**
+
+#### Clone the Repository
+
+1. **Clone the Repository**
+
+```bash
+git clone https://github.com/SamiBister/VocabVoyage.git
+cd VocabVoyage
+```
+
+### Backend Setup
+
+1. **Set Up Virtual Environment**
 
    ```bash
    uv venv & uv sync
    source venv/bin/activate,sh   # On Windows use `venv\Scripts\activate`
    ```
 
-3. **Run Unit Tests**
+2. **Run Unit Tests**
 
    ```bash
    uv python -m pytest tests --cov
    ```
 
-4. **Start the Backend Server**
+3. **Start the Backend Server**
 
    ```bash
    uv run uvicorn app.main:app --reload
