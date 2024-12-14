@@ -56,10 +56,11 @@ frontend/build/
 
 # Documentation and markdown files
 docs/
-*.md
+**/*.md
+!README.md
 
 # Lock files
-*.lock
+#*.lock
 
 # Exclude frontend dependencies
 frontend/node_modules/
