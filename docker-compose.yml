@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v2.10
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbyDefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--log.level=DEBUG"
+      - "--accesslog=true" # Enable access logs
+      - "--accesslog.filepath=/var/log/traefik/access.log"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./logs/traefik:/var/log/traefik # Mount log directory
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: .
+      dockerfile: devops/docker/backend/Dockerfile
+    environment:
+      - FASTAPI_SETTINGS=production
+    labels:
+      - "traefik.enable=true"
+      # Backend Service Definition
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+      # API Router with middleware to strip prefix
+      - "traefik.http.middlewares.strip-api.stripprefix.prefixes=/api"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.routers.backend.service=backend"
+      - "traefik.http.routers.backend.middlewares=strip-api"
+      # Docs Router (no stripping for docs)
+      - "traefik.http.routers.docs.rule=PathPrefix(`/api/docs`) || PathPrefix(`/api/openapi.json`)"
+      - "traefik.http.routers.docs.entrypoints=web"
+      - "traefik.http.routers.docs.service=backend"
+      - "traefik.http.routers.docs.priority=200"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: devops/docker/frontend/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=/api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend.priority=1"
+      # Fix Next.js static file handling
+      - "traefik.http.middlewares.next-headers.headers.customResponseHeaders.X-Frame-Options=SAMEORIGIN"
+      - "traefik.http.routers.frontend.middlewares=next-headers"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

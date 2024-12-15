@@ -49,11 +49,19 @@ export default function Home() {
    * @async
    */
   const startQuiz = async () => {
+    try {
+    console.log('Sending request to:', `${API_URL}/set_mode/`);
+    console.log('Should be:', `${process.env.NEXT_PUBLIC_API_URL}/set_mode/`);
     await axios.post(`${API_URL}/set_mode/`, {
       mode,
     });
+    console.log('Mode set successfully');
     await axios.post(`${API_URL}/start_quiz/`);
+    console.log('Quiz started successfully');
     fetchNextWord();
+  } catch (error) {
+    console.error('Error in startQuiz:', error.response?.data || error.message);
+  }
   };
 
   /**

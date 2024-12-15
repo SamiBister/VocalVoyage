@@ -188,9 +188,9 @@ cd VocabVoyage
    uv run uvicorn app.main:app --reload
    ```
 
-   The backend server will start at `http://localhost:8000`.
+   The backend server will start at `http://localhost:8000/api`.
 
-   The backend server swaggers documentation is at `http://localhost:8000/docs`.
+   The backend server swaggers documentation is at `http://localhost:8000/api/docs`.
 
 ### Frontend Setup
 
@@ -211,7 +211,7 @@ cd VocabVoyage
    Create a `.env.local` file in the `frontend` directory:
 
    ```env
-   NEXT_PUBLIC_API_URL=http://localhost:8000
+   NEXT_PUBLIC_API_URL=http://localhost:8000/api
    ```
 
 4. **Start the Frontend Server**
@@ -378,7 +378,7 @@ The application uses new scripts for starting the backend and frontend services.
    ./start-dev.sh
    ```
 
-   - The backend will be accessible at: [http://localhost:3000/](http://localhost:3000/).
+   - The backend will be accessible at: [http://localhost:8000/api](http://localhost:8000/api).
    - The frontend will be accessible at: [http://localhost:3000/](http://localhost:3000/).
 
 ## **Uploading a New Questionnaire File**
@@ -392,19 +392,16 @@ The application supports uploading questionnaire files to update or add new ques
    - File type: CSV file.
    - Ensure it follows the structure:
 
-     ```csv
-
-     ```
-
+```csv
 Foreing,Native
 Omena,Apple
 Koulu,Sc
-
 ```
 
-2. Access the Upload Feature:
+1. Access the Upload Feature:
    - Open app
      - Go to the URL [http://localhost:3000/](http://localhost:3000/)
    - Press the **Choose file** button.
    - Press the **Upload files** button.
+
 ```

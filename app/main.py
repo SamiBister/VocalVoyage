@@ -28,7 +28,7 @@ from app.interfaces.logger import QuizLogger
 from app.interfaces.repositories import WordRepository
 from app.use_cases.word_service import WordService
 
-app = FastAPI(title="VocabVoyage")
+app = FastAPI(title="VocabVoyage", root_path="/api")
 
 # CORS middleware to allow frontend communication
 app.add_middleware(
