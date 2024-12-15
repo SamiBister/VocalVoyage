@@ -92,12 +92,12 @@ We recommend using DevContainers for development to ensure a consistent and isol
 
 1. Build image:
 
-```bash
+````bash
 ```bash
 docker build --platform linux/amd64 -t devenv -f .devcontainer/Dockerfile .
-```
+````
 
-```
+````
 
 
 2. Run container:
@@ -111,7 +111,7 @@ docker run -it --rm \
   -p 8000:8000 \
   devenv \
   fish
-```
+````
 
 3. Initialize the workspace:
 
@@ -208,11 +208,7 @@ cd VocabVoyage
 
 3. **Create Environment File**
 
-   Create a `.env.local` file in the `frontend` directory:
-
-   ```env
-   NEXT_PUBLIC_API_URL=http://localhost:8000/api
-   ```
+   set NEXT_PUBLIC_API_URL to http://localhost:8000/api
 
 4. **Start the Frontend Server**
 
@@ -403,5 +399,7 @@ Koulu,Sc
      - Go to the URL [http://localhost:3000/](http://localhost:3000/)
    - Press the **Choose file** button.
    - Press the **Upload files** button.
+
+```
 
 ```

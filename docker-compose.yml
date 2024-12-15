@@ -53,7 +53,7 @@ services:
       - NEXT_PUBLIC_API_URL=/api
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`) || PathPrefix(`/en`) || PathPrefix(`/fi`)"
       - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
       - "traefik.http.routers.frontend.priority=1"

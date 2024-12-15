@@ -24,6 +24,8 @@ WORKDIR /workspace
 # Set fish as the default shell for the vscode user
 RUN chsh -s /usr/bin/fish node
 
+
+
 # Expose port 3000 for Next.js
 EXPOSE 3000
 # Expose port 8000 for FastApi
@@ -34,7 +36,7 @@ USER node
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh 
 # Add /home/vscode/.local/bin to the PATH
 ENV PATH="/home/node/.local/bin:${PATH}"
-
+ENV NEXT_PUBLIC_API_URL=http://localhost:8000/api
 
 # Install LazyVim
 RUN git clone https://github.com/LazyVim/starter ~/.config/nvim && \
