@@ -20,6 +20,8 @@ As secondary purpose this is showcase for tech that I find useful and improve de
 - Playwright for end-to-end testing
 - Devlopment container for consistent development environment
   - Add tmux and neovim for development container, to enable nvim development inside tmux
+- Docker compose for one host setup
+- Traefik for reverse proxy in docker compose
 
 ## Features
 
@@ -41,11 +43,27 @@ Documents can be found in `docs` folder.
 
 ```plaintext
 VocabVoyage/
-├── app/                  # Backend FastAPI application
-├── frontend/             # Frontend Next.js application
-├── setup.py              # Packaging script for the backend
-├── requirements.txt      # Python dependencies
-├── README.md             # Project documentation
+├── .devcontainer/       # Development container configuration
+├── .github/            # GitHub Actions workflows
+├── app/                # Backend FastAPI application
+│   ├── data/          # CSV files with vocabulary
+│   ├── domain/        # Business models
+│   ├── interfaces/    # Repository interfaces
+│   ├── out/          # Quiz result logs
+│   ├── tests/        # Backend tests
+│   └── use_cases/    # Business logic
+├── devops/            # DevOps configuration files
+│   └── docker/       # Docker related files
+├── docs/              # Project documentation
+│   └── adr/          # Architecture Decision Records
+├── frontend/          # Frontend Next.js application
+│   ├── locales/      # Frontend translations
+│   └── pages/        # Next.js pages
+├── e2e/              # End-to-end tests 
+├── docker-compose.yml # Docker compose configuration
+├── setup.py          # Packaging script for backend
+├── pyproject.toml    # Python project configuration
+└── README.md         # Project documentation
 ```
 
 ## Getting Started
@@ -208,7 +226,7 @@ cd VocabVoyage
 
 3. **Create Environment File**
 
-   set NEXT_PUBLIC_API_URL to http://localhost:8000/api
+   set NEXT_PUBLIC_API_URL to <http://localhost:8000/api>
 
 4. **Start the Frontend Server**
 
@@ -337,32 +355,21 @@ Run the following command to run the backend unit tests:
 uv run pytest -m e2e -vvvv --durations=0 --cov --cov-report=xml
 ```
 
-## Contributing
+## **How to Start the Application in docker**
 
-Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
+The application uses new scripts for starting the backend and frontend services.
 
-## License
+1. Ensure you have docker installed
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```bash
+docker-compose up
+```
 
-## Contact
+The frontend is in [http:localhost](http://localhost/)
+The backend is in [http:localhost/api](http://localhost/api)
+The backend swagger is in [http:localhost/api/docs](http://localhost/api/docs)
 
-- **Author**: Sami Bister
-
----
-
-I hope this provides everything you need to get started with **VocabVoyage**. If you have any further questions or need assistance with specific parts of the code, feel free to ask!
-
-It sounds like your README file needs to be updated to include instructions on:
-
-1. **Starting the application with the new scripts.**
-2. **Uploading a new questionnaire file.**
-
-Here’s how you can revise and expand the README to include these sections:
-
----
-
-## **How to Start the Application**
+## **How to Start the Application locally**
 
 The application uses new scripts for starting the backend and frontend services.
 
@@ -400,6 +407,14 @@ Koulu,Sc
    - Press the **Choose file** button.
    - Press the **Upload files** button.
 
-```
+## Contributing
 
-```
+Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+- **Author**: Sami Bister
