@@ -42,3 +42,7 @@ runs:
         git push origin "v${{ steps.gitversion.outputs.semVer }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+inputs:
+  github_token:
+    description: 'GitHub token'
+    required: true
