@@ -38,11 +38,12 @@ jobs:
         run: |
           uv sync
           cd frontend
-          npm install
+
 
       - name: Build Frontend
         run: |
           cd frontend
+          npm install
           npm run build
 
       - name: Start Backend Server
@@ -60,11 +61,6 @@ jobs:
       #     cd frontend
       #     npm run start -- --hostname 0.0.0.0 &
       #     echo $! > ../frontend_pid.txt
-      - name: Setup Environment
-        run: |
-          cd frontend
-          cp .env.template .env.local
-          cat .env.local
       - name: Set Environment Variables
         run: echo "NEXT_PUBLIC_API_URL=http://localhost:8000" >> $GITHUB_ENV
 
@@ -74,7 +70,7 @@ jobs:
       - name: Start Frontend Server
         run: |
           cd frontend
-          cp .env.template .env.local
+          cp .env.ci .env.local
           cat .env.local
           export NEXT_PUBLIC_API_URL=http://localhost:8000
           npm run start -- --hostname 0.0.0.0 &
@@ -101,10 +97,10 @@ jobs:
           done
           echo "Frontend server is up!"
 
-      #- name: Run Playwright Tests
-      #  run: |
-      #    uv run playwright install
-      #    uv run pytest -m e2e -vvv --durations=0 --cov --cov-report=xml
+      - name: Run Playwright Tests
+       run: |
+         uv run playwright install
+         uv run pytest -m e2e -vvv --durations=0 --cov --cov-report=xml
 
       # - name: Stop Servers
       #   run: |
