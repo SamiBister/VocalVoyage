@@ -45,9 +45,14 @@ jobs:
       - name: Security scan to backend code
         uses: ./.github/actions/securitycode
         with:
-          directory: .
+          directory: ./app
 
       - name: Security scan to frontend code
         uses: ./.github/actions/securitycode
         with:
           directory: ./frontend
+
+      - name: Remove requirements.txt
+        shell: bash
+        working-directory: ./app
+        run: rm requirements.txt
