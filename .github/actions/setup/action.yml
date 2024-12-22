@@ -1,5 +1,4 @@
 runs:
-  name: "Setup"
   using: composite
   steps:
     - name: "Install UV"
