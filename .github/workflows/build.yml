@@ -1,0 +1,18 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+        default: "main"
+
+jobs:
+  lock_file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: uv lock --locked
+      - run: uv run python -m build

@@ -11,9 +11,21 @@ jobs:
     with:
       ref: ${{ github.ref }}
 
+  tests:
+    uses: ./.github/workflows/tests.yml
+    needs: code-quality
+    with:
+      ref: ${{ github.ref }}
+
+  build:
+    uses: ./.github/workflows/build.yml
+    needs: tests
+    with:
+      ref: ${{ github.ref }}
+
   publish:
     if: ${{ success() }}
-    needs: code-quality
+    needs: build
     uses: ./.github/workflows/publish.yml
     with:
       ref: ${{ github.ref }}
