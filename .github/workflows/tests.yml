@@ -69,8 +69,10 @@ jobs:
           echo "Backend server is up!"
 
       - name: Start Frontend Server
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
         run: |
-          cd frontend
           cp .env.ci .env.local
           npm run start -- --hostname 0.0.0.0 &
           echo $! > ../frontend_pid.txt
