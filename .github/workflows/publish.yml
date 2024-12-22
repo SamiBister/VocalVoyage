@@ -52,7 +52,7 @@ jobs:
         with:
           directory: ./frontend
 
-      - name: Remove requirements.txt
-        shell: bash
-        working-directory: ./app
-        run: rm requirements.txt
+      # - name: Remove requirements.txt
+      #   shell: bash
+      #   working-directory: ./app
+      #   run: rm requirements.txt

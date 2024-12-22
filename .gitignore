@@ -828,4 +828,6 @@ FodyWeavers.xsd
 .next/
 build
 test-artifacts/*.png
+$XDG_CACHE_HOME
+sbom.json
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,linux,visualstudio,visualstudiocode,jetbrains,vim,python,nextjs
