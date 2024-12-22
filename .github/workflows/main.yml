@@ -1,0 +1,16 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  code-quality:
+    uses: ./.github/workflows/code-quality.yml
+
+  publish:
+    if: ${{ success() }}
+    needs: code-quality
+    uses: ./.github/workflows/publish.yml

@@ -1,5 +1,14 @@
 name: Python Code Quality
-on: [push]
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+        default: "main"
+    secrets: inherit
+
 jobs:
   lock_file:
     runs-on: ubuntu-latest

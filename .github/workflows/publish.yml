@@ -1,10 +1,13 @@
 name: Publish Containers
 
 on:
-  workflow_run:
-    workflows: ["code-quality.yml"]
-    types:
-      - completed
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+        default: "main"
+    secrets: inherit
 
 jobs:
   publish-artifacts:
