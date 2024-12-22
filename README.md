@@ -22,6 +22,7 @@ As secondary purpose this is showcase for tech that I find useful and improve de
   - Add tmux and neovim for development container, to enable nvim development inside tmux
 - Docker compose for one host setup
 - Traefik for reverse proxy in docker compose
+- Automate semantic versioning with commit messages using GitVersion
 
 ## Features
 
