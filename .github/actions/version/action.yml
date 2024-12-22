@@ -31,3 +31,14 @@ runs:
       if: github.ref != 'refs/heads/main'
       run: |
         echo "CUSTOM_VERSION=${{ steps.gitversion.outputs.majorMinorPatch }}-dev${{ github.run_number  }}" >> $GITHUB_ENV
+
+    - name: Create and Push Tag
+      if: github.ref == 'refs/heads/main' && steps.gitversion.outputs.semVer != ''
+      shell: bash
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a "v${{ steps.gitversion.outputs.semVer }}" -m "Release version ${{ steps.gitversion.outputs.semVer }}"
+        git push origin "v${{ steps.gitversion.outputs.semVer }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
