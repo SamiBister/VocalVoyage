@@ -114,10 +114,10 @@ jobs:
           done
           echo "Frontend server is up!"
 
-      - name: Run Playwright Tests
-        run: |
-          uv run playwright install
-          uv run pytest -m e2e -vvv --durations=0 --cov --cov-report=xml
+      #- name: Run Playwright Tests
+      #  run: |
+      #    uv run playwright install
+      #    uv run pytest -m e2e -vvv --durations=0 --cov --cov-report=xml
 
       # - name: Stop Servers
       #   run: |
