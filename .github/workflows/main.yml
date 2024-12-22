@@ -8,8 +8,12 @@ on:
 jobs:
   code-quality:
     uses: ./.github/workflows/code-quality.yml
+    with:
+      ref: ${{ github.ref }}
 
   publish:
     if: ${{ success() }}
     needs: code-quality
     uses: ./.github/workflows/publish.yml
+    with:
+      ref: ${{ github.ref }}
