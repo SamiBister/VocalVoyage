@@ -2,18 +2,19 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
-      # with:
-      #   fetch-depth: 0  # Fetch all history for all branches and tags
+
     - name: Fetch all history for all tags and branches...
       shell: bash
       run: |
         git fetch --prune --unshallow
         git fetch --tags
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.10.2
       with:
         versionSpec: "5.x"
         includePrerelease: true
+
     - name: Run GitVersion
       uses: gittools/actions/gitversion/execute@v0.10.2
       id: gitversion
@@ -21,11 +22,13 @@ runs:
       with:
         useConfigFile: true
         configFilePath: GitVersion.yml
+
     - name: Set main version
       shell: bash
       if: github.ref == 'refs/heads/main'
       run: |
         echo "CUSTOM_VERSION=${{ steps.gitversion.outputs.majorMinorPatch }}" >> $GITHUB_ENV
+        
     - name: Set development version
       shell: bash
       if: github.ref != 'refs/heads/main'
@@ -38,5 +41,5 @@ runs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -a "v${{ steps.gitversion.outputs.semVer }}" -m "Release version ${{ steps.gitversion.outputs.semVer }}"
-        git push origin "v${{ steps.gitversion.outputs.semVer }}"
+        git tag -a "${{ steps.gitversion.outputs.semVer }}" -m "Main version ${{ steps.gitversion.outputs.semVer }}"
+        git push origin "${{ steps.gitversion.outputs.semVer }}"

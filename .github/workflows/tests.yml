@@ -87,7 +87,7 @@ jobs:
 
       - name: Run Playwright Tests
         run: |
-          uv run playwright install
+          uv run playwright install chromium
           uv run pytest -m e2e -vvv --durations=0 --cov --cov-report=xml
 
       - name: Kill Process on Port 3000
@@ -97,11 +97,11 @@ jobs:
             kill -9 $(lsof -t -i :3000)
           fi
 
-      - name: Kill Process on Port 3000
+      - name: Kill Process on Port 8000
         shell: bash
         run: |
-          if lsof -i :3000; then
-              kill -9 $(lsof -t -i :3000)
+          if lsof -i :8000; then
+              kill -9 $(lsof -t -i :8000)
           fi
 
       - name: Upload test artifacts

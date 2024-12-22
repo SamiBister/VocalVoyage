@@ -1,0 +1,23 @@
+name: Security Scan
+description: Generate SBOM with Syft and run security scan with Grype
+inputs:
+  directory:
+    description: 'The directory to scan'
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Generate SBOM with Syft
+      shell: bash
+      working-directory: ${{ inputs.directory }}
+      run: |
+        syft ${{ inputs.directory }} -o json > sbom.json
+
+    - name: Run Security Scan with Grype
+      working-directory: ${{ inputs.directory }}
+      shell: bash
+      run: |
+        grype sbom:sbom.json --fail-on high

@@ -21,7 +21,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set version
         uses: ./.github/actions/version
+
       - name: print version
         run: echo ${{ env.CUSTOM_VERSION }}
+
+      - name: setup security
+        uses: ./.github/actions/security_setup
+
+      - name: Generate requirements.txt
+        shell: bash
+        run: uv export --format requirements-txt --output-file requirements.txt
+
+      - name: Security scan to backend code
+        uses: ./.github/actions/securitycode
+        with:
+          directory: .
+
+      - name: Security scan to backend code
+        uses: ./.github/actions/securitycode
+        with:
+          directory: ./frontend
