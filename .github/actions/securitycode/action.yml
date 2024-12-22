@@ -14,7 +14,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.directory }}
       run: |
-        syft ${{ inputs.directory }} -o json > sbom.json
+        syft . -o json > sbom.json
 
     - name: Run Security Scan with Grype
       working-directory: ${{ inputs.directory }}
