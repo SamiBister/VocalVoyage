@@ -2,13 +2,13 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Fetch all history for all branches and tags
-    # - name: Fetch all history for all tags and branches...
-    #   shell: bash
-    #   run: |
-    #     git fetch --prune --unshallow
-    #     git fetch --tags
+      # with:
+      #   fetch-depth: 0  # Fetch all history for all branches and tags
+    - name: Fetch all history for all tags and branches...
+      shell: bash
+      run: |
+        git fetch --prune --unshallow
+        git fetch --tags
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.10.2
       with:
