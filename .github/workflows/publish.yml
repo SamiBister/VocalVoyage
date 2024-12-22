@@ -38,12 +38,16 @@ jobs:
         shell: bash
         run: uv export --format requirements-txt --output-file requirements.txt
 
+      - name: move requirements.txt
+        shell: bash
+        run: mv requirements.txt app/requirements.txt
+
       - name: Security scan to backend code
         uses: ./.github/actions/securitycode
         with:
           directory: .
 
-      - name: Security scan to backend code
+      - name: Security scan to frontend code
         uses: ./.github/actions/securitycode
         with:
           directory: ./frontend
