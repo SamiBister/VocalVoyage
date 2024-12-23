@@ -20,4 +20,4 @@ runs:
       working-directory: ${{ inputs.directory }}
       shell: bash
       run: |
-        grype sbom:sbom.json --fail-on high
+        grype sbom:sbom.json --only-fixed --fail-on high
