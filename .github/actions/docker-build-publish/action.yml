@@ -1,0 +1,75 @@
+name: "Docker Build and Publish"
+description: "Build and publish a Docker image using raw Docker commands"
+
+inputs:
+  working-directory:
+    description: "Path to the directory containing Dockerfile and source code"
+    required: true
+  dockerfile-path:
+    description: "Relative path to the Dockerfile (from working directory)"
+    required: true
+  docker-registry:
+    description: "Docker registry (e.g. docker.io, ghcr.io)"
+    required: true
+  docker-image-name:
+    description: "Name of the Docker image (e.g., myorg/myimage)"
+    required: true
+  docker-tag:
+    description: "Docker image tag (e.g., latest, 1.0.0, commit-SHA)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Docker Build
+      shell: bash
+      run: |
+        docker build -f ${{ inputs.dockerfile-path }} -t "{{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}"
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Generaate SBOM with Syft
+      shell: bash
+      run: |
+        syft {{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} -o json > sbom.json
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Run Security Scan with Grype
+      shell: bash
+      run: |
+        grype sbom:sbom.json --fail-on high
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Remove sbom.json
+      shell: bash
+      run: |
+        rm sbom.json
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Docker Login
+      shell: bash
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin "${{ inputs.docker-registry }}"
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Docker Push
+      shell: bash
+      run: |
+        docker push "${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}"
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Docker Logout
+      shell: bash
+      run: |
+        docker logout "${{ inputs.docker-registry }}"
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+

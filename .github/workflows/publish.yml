@@ -52,7 +52,26 @@ jobs:
         with:
           directory: ./frontend
 
-      # - name: Remove requirements.txt
-      #   shell: bash
-      #   working-directory: ./app
-      #   run: rm requirements.txt
+      - name: Build and Publish Backend Docker Image
+        uses: ./.github/actions/docker-build-publish
+        with:
+          working-directory: "."
+          dockerfile-path: "devops/docker/backend/Dockerfile"
+          docker-registry: "docker.io"
+          docker-image-name: "samibister/vocabvoyage-backend"
+          docker-tag: "${{ env.CUSTOM_VERSION }}"
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Publish Frontend Docker Image
+        uses: ./.github/actions/docker-build-publish
+        with:
+          working-directory: "."
+          dockerfile-path: "devops/docker/frontend/Dockerfile"
+          docker-registry: "docker.io"
+          docker-image-name: "samibister/vocabvoyage-front"
+          docker-tag: "${{ env.CUSTOM_VERSION }}"
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
