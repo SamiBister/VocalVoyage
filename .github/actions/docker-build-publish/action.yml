@@ -36,7 +36,7 @@ runs:
     - name: Generaate SBOM with Syft
       shell: bash
       run: |
-        syft {{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} -o json > sbom.json
+        syft ${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} -o json > sbom.json
       working-directory: ${{ inputs.working-directory }}
 
     - name: Run Security Scan with Grype
