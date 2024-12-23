@@ -60,9 +60,8 @@ jobs:
           docker-registry: "docker.io"
           docker-image-name: "samibister/vocabvoyage-backend"
           docker-tag: "${{ env.CUSTOM_VERSION }}"
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          docker-user: ${{ secrets.DOCKER_USER }}
+          docker-password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Publish Frontend Docker Image
         uses: ./.github/actions/docker-build-publish

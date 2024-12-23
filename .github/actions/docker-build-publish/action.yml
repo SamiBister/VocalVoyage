@@ -17,6 +17,12 @@ inputs:
   docker-tag:
     description: "Docker image tag (e.g., latest, 1.0.0, commit-SHA)"
     required: true
+  docker-user:
+    description: "Docker username"
+    required: true
+  docker-password:
+    description: "Docker password or token"
+    required: true
 
 runs:
   using: "composite"
@@ -25,9 +31,6 @@ runs:
       shell: bash
       run: |
         docker build -f ${{ inputs.dockerfile-path }} -t "{{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}"
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       working-directory: ${{ inputs.working-directory }}
 
     - name: Generaate SBOM with Syft
@@ -51,25 +54,16 @@ runs:
     - name: Docker Login
       shell: bash
       run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin "${{ inputs.docker-registry }}"
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        echo "${{ inputs.DOCKER_PASSWORD }}" | docker login -u "${{ inputs.DOCKER_USER }}" --password-stdin "${{ inputs.docker-registry }}"
 
     - name: Docker Push
       shell: bash
       run: |
         docker push "${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}"
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       working-directory: ${{ inputs.working-directory }}
 
     - name: Docker Logout
       shell: bash
       run: |
         docker logout "${{ inputs.docker-registry }}"
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
