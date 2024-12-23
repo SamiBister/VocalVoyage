@@ -30,7 +30,7 @@ runs:
     - name: Run Docker Build
       shell: bash
       run: |
-        docker build -f ${{ inputs.dockerfile-path }} -t "{{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}"
+        docker build -f ${{ inputs.dockerfile-path }} -t ${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}"
       working-directory: ${{ inputs.working-directory }}
 
     - name: Generaate SBOM with Syft
@@ -59,7 +59,7 @@ runs:
     - name: Docker Push
       shell: bash
       run: |
-        docker push "${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}"
+        docker push "${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}" .
       working-directory: ${{ inputs.working-directory }}
 
     - name: Docker Logout
