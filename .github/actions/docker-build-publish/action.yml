@@ -54,7 +54,7 @@ runs:
     - name: Docker Login
       shell: bash
       run: |
-        echo "${{ inputs.DOCKER_PASSWORD }}" | docker login -u "${{ inputs.DOCKER_USER }}" --password-stdin "${{ inputs.docker-registry }}"
+        echo "${{ inputs.docker-password }}" | docker login -u "${{ inputs.docker-user }}" --password-stdin "${{ inputs.docker-registry }}"
 
     - name: Docker Push
       shell: bash
