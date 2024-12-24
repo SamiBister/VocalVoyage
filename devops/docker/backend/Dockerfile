@@ -23,11 +23,16 @@ RUN groupadd -r app && \
 
 WORKDIR /app
 
+# Copy the application and Python packages
+COPY  --chown=app:app  --from=builder /app /app
+
 # Expose port 8000
 EXPOSE 8000
 
-# Copy from builder
-COPY --from=builder /app /app
+# # Copy from builder
+# COPY --from=builder /app /app
+
+USER app
 
 # Run the application
 CMD ["/app/.venv/bin/uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

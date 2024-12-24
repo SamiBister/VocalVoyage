@@ -16,23 +16,33 @@ COPY frontend/ .
 # Build application
 RUN npm run build
 
-# Production stage
-FROM node:18-alpine AS runner
+#Production stage
+FROM node:23-alpine AS runner
+
+
+# # Create app user
+# RUN mkdir -p /app && \
+#     chown app:app /app
 
 WORKDIR /app
 
 # Copy necessary files from builder
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/.env.local ./.env.local
-COPY --from=builder /app/node_modules ./node_modules
+COPY  --chown=node:node --from=builder /app/.next ./.next
+COPY  --chown=node:node --from=builder /app/public ./public
+COPY  --chown=node:node --from=builder /app/package.json ./package.json
+COPY  --chown=node:node --from=builder /app/.env.local ./.env.local
+COPY  --chown=node:node --from=builder /app/node_modules ./node_modules
 
+
+
+EXPOSE 3000
 # Set production environment
 ENV NODE_ENV=production
 ENV NEXT_PUBLIC_API_URL=/api
 
-EXPOSE 3000
+USER node
 
 # Start the application
 CMD ["npm", "start"]
+
+
