@@ -57,11 +57,7 @@ runs:
         grype sbom:sbom.json --only-fixed --fail-on high
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Remove sbom.json
-      shell: bash
-      run: |
-        rm sbom.json
-      working-directory: ${{ inputs.working-directory }}
+
 
     - name: Docker Login
       shell: bash
@@ -114,5 +110,10 @@ runs:
       run: |
         docker logout "${{ inputs.docker-registry }}"
 
+    - name: Remove sbom.json
+      shell: bash
+      run: |
+        rm sbom.json
+      working-directory: ${{ inputs.working-directory }}
 
 
