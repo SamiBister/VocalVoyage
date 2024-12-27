@@ -11,6 +11,9 @@ inputs:
   docker-registry:
     description: "Docker registry (e.g. docker.io, ghcr.io)"
     required: true
+  docker-repository:
+    description: "Docker repository (e.g. samibister)"
+    required: true
   docker-image-name:
     description: "Name of the Docker image (e.g., myorg/myimage)"
     required: true
@@ -23,6 +26,12 @@ inputs:
   docker-password:
     description: "Docker password or token"
     required: true
+  cosign-key:
+    description: "Cosign priavate key"
+    required: true
+  cosign-password:
+    description: "Cosign passpharse"
+    required: true
 
 runs:
   using: "composite"
@@ -33,13 +42,13 @@ runs:
     - name: Run Docker Build
       shell: bash
       run: |
-        docker buildx build --sbom=true --provenance=true -f ${{ inputs.dockerfile-path }} -t ${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} .
+        docker buildx build --sbom=true --provenance=true -f ${{ inputs.dockerfile-path }} -t ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} .
       working-directory: ${{ inputs.working-directory }}
 
     - name: Generaate SBOM with Syft
       shell: bash
       run: |
-        syft ${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} -o json > sbom.json
+        syft ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} -o json > sbom.json
       working-directory: ${{ inputs.working-directory }}
 
     - name: Run Security Scan with Grype
@@ -62,8 +71,27 @@ runs:
     - name: Docker Push
       shell: bash
       run: |
-        docker push ${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
+        docker push ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
       working-directory: ${{ inputs.working-directory }}
+
+    - name: Install Cosign
+      uses: sigstore/cosign-installer@v3
+      with:
+        cosign-release: 'latest'
+
+    - name: Attest SBOM (key-based)
+      env:
+        COSIGN_PASSWORD: ${{ inputs.cosign-password }}
+        COSIGN_KEY: ${{ inputs.cosign-key }}
+      run: |
+        # Decode the private key from base64 (if stored as base64 in GitHub Secrets)
+        echo "$COSIGN_KEY" | base64 -d > cosign.key
+
+        # Attest the SBOM with the private key
+        cosign attest \
+          --predicate sbom.json \
+          --key cosign.key \
+          ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
 
     # - name: Install Cosign
     #   shell: bash
@@ -78,6 +106,8 @@ runs:
     #       --predicate sbom.json \
     #       --type https://spdx.dev/documents/ \
     #       ${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
+
+
 
     - name: Docker Logout
       shell: bash

@@ -63,10 +63,13 @@ jobs:
           working-directory: "."
           dockerfile-path: "devops/docker/backend/Dockerfile"
           docker-registry: "docker.io"
-          docker-image-name: "samibister/vocabvoyage-backend"
+          docker-repository: "samibister"
+          docker-image-name: "vocabvoyage-backend"
           docker-tag: "${{ env.CUSTOM_VERSION }}"
           docker-user: ${{ secrets.DOCKER_USER }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
+          cosign-key: ${{ secrets.COSIGN_KEY }}
+          cosign-password: ${{ secrets.COSIGN_PASSWORD }}
 
       - name: Build and Publish Frontend Docker Image
         uses: ./.github/actions/docker-build-publish
@@ -74,7 +77,10 @@ jobs:
           working-directory: "."
           dockerfile-path: "devops/docker/frontend/Dockerfile"
           docker-registry: "docker.io"
-          docker-image-name: "samibister/vocabvoyage-front"
+          docker-repository: "samibister"
+          docker-image-name: "vocabvoyage-front"
           docker-tag: "${{ env.CUSTOM_VERSION }}"
           docker-user: ${{ secrets.DOCKER_USER }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
+          cosign-key: ${{ secrets.COSIGN_KEY }}
+          cosign-password: ${{ secrets.COSIGN_PASSWORD }}
