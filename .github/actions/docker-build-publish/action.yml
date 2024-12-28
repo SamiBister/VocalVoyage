@@ -106,7 +106,7 @@ runs:
           --predicate sbom.json \
           --key cosign.key \
           --yes \
-          ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}@${{ steps.digest.outputs.digest }}
+          ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
 
     - name: Docker Logout
       shell: bash
