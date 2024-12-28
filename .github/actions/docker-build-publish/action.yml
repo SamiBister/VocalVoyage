@@ -79,6 +79,7 @@ runs:
       env:
         COSIGN_PASSWORD: ${{ inputs.cosign-password }}
         COSIGN_KEY: ${{ inputs.cosign-key }}
+      shell: bash
       run: |
         # Decode the private key from base64 (if stored as base64 in GitHub Secrets)
         echo "$COSIGN_KEY" | base64 -d > cosign.key
