@@ -12,17 +12,18 @@ on:
         required: true
       DOCKER_PASSWORD:
         required: true
+      COSIGN_KEY:
+        required: true
+      COSIGN_PASSWORD:
+        required: true
 
 jobs:
-  publish-artifacts:
-    permissions:
-      # required for all workflows
-      security-events: write
-      # only required for workflows in private repositories
-      actions: read
-      contents: write
+  determine-version:
+    name: Determine Version
     runs-on: ubuntu-latest
-
+    # Expose the version as a job output
+    outputs:
+      custom_version: ${{ steps.set_version.outputs.custom_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,10 +32,34 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Set version
+        id: set_version
         uses: ./.github/actions/version
+        # Note: Ensure your `.github/actions/version` action sets an output
+        # something like:
+        #   echo "::set-output name=custom_version::$CUSTOM_VERSION"
 
-      - name: print version
-        run: echo ${{ env.CUSTOM_VERSION }}
+      - name: Print version from step
+        run: |
+          echo "Version from step: ${{ steps.set_version.outputs.custom_version }}"
+
+  publish-artifacts-backend:
+    name: Publish Artifacts - Backend
+    runs-on: ubuntu-latest
+    needs: [determine-version] # Waits for 'determine-version' job
+    permissions:
+      security-events: write
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: setup
+        uses: ./.github/actions/setup
+
+      - name: Print version
+        run: |
+          echo "Version from determine-version job: ${{ needs.determine-version.outputs.custom_version }}"
 
       - name: setup security
         uses: ./.github/actions/security_setup
@@ -52,11 +77,6 @@ jobs:
         with:
           directory: ./app
 
-      - name: Security scan to frontend code
-        uses: ./.github/actions/securitycode
-        with:
-          directory: ./frontend
-
       - name: Build and Publish Backend Docker Image
         uses: ./.github/actions/docker-build-publish
         with:
@@ -65,11 +85,39 @@ jobs:
           docker-registry: "docker.io"
           docker-repository: "samibister"
           docker-image-name: "vocabvoyage-backend"
-          docker-tag: "${{ env.CUSTOM_VERSION }}"
+          # use the version from the determine-version job
+          docker-tag: ${{ needs.determine-version.outputs.custom_version }}
           docker-user: ${{ secrets.DOCKER_USER }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
           cosign-key: ${{ secrets.COSIGN_KEY }}
           cosign-password: ${{ secrets.COSIGN_PASSWORD }}
+
+  publish-artifacts-frontend:
+    name: Publish Artifacts - Frontend
+    runs-on: ubuntu-latest
+    needs: [determine-version] # Waits for 'determine-version' job
+    permissions:
+      security-events: write
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: setup
+        uses: ./.github/actions/setup
+
+      - name: Print version
+        run: |
+          echo "Version from determine-version job: ${{ needs.determine-version.outputs.custom_version }}"
+
+      - name: setup security
+        uses: ./.github/actions/security_setup
+
+      - name: Security scan to frontend code
+        uses: ./.github/actions/securitycode
+        with:
+          directory: ./frontend
 
       - name: Build and Publish Frontend Docker Image
         uses: ./.github/actions/docker-build-publish
@@ -79,7 +127,8 @@ jobs:
           docker-registry: "docker.io"
           docker-repository: "samibister"
           docker-image-name: "vocabvoyage-front"
-          docker-tag: "${{ env.CUSTOM_VERSION }}"
+          # use the version from the determine-version job
+          docker-tag: ${{ needs.determine-version.outputs.custom_version }}
           docker-user: ${{ secrets.DOCKER_USER }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
           cosign-key: ${{ secrets.COSIGN_KEY }}

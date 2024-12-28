@@ -1,5 +1,12 @@
+name: "Version Composite"
+description: "Composite action that determines a GitVersion-based version and exposes it as an output."
+
+outputs:
+  custom_version:
+    description: "The version determined by GitVersion."
+
 runs:
-  using: composite
+  using: "composite"
   steps:
     - uses: actions/checkout@v4
 
@@ -16,8 +23,8 @@ runs:
         includePrerelease: true
 
     - name: Run GitVersion
-      uses: gittools/actions/gitversion/execute@v0.10.2
       id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.10.2
       continue-on-error: true
       with:
         useConfigFile: true
@@ -28,12 +35,12 @@ runs:
       if: github.ref == 'refs/heads/main'
       run: |
         echo "CUSTOM_VERSION=${{ steps.gitversion.outputs.majorMinorPatch }}" >> $GITHUB_ENV
-        
+
     - name: Set development version
       shell: bash
       if: github.ref != 'refs/heads/main'
       run: |
-        echo "CUSTOM_VERSION=${{ steps.gitversion.outputs.majorMinorPatch }}-dev${{ github.run_number  }}" >> $GITHUB_ENV
+        echo "CUSTOM_VERSION=${{ steps.gitversion.outputs.majorMinorPatch }}-dev${{ github.run_number }}" >> $GITHUB_ENV
 
     - name: Create and Push Tag
       if: github.ref == 'refs/heads/main' && steps.gitversion.outputs.semVer != ''
@@ -41,5 +48,14 @@ runs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -a "${{ steps.gitversion.outputs.semVer }}" -m "Main version ${{ steps.gitversion.outputs.semVer }}"
-        git push origin "${{ steps.gitversion.outputs.semVer }}"
+        git tag -a "${{ env.CUSTOM_VERSION }}" -m "Main version ${{ env.CUSTOM_VERSION }}"
+        git push origin "${{ env.CUSTOM_VERSION }}"
+
+    # <<-- This step exposes the final environment variable as a named output.
+    - name: Expose CUSTOM_VERSION as action output
+      id: set_version
+      shell: bash
+      run: |
+        # $CUSTOM_VERSION is now in the environment (from previous steps that wrote to $GITHUB_ENV).
+        # We'll convert it into a step output so the entire composite action can expose it.
+        echo "custom_version=$CUSTOM_VERSION" >> $GITHUB_OUTPUT

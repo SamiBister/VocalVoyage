@@ -89,22 +89,6 @@ runs:
           --key cosign.key \
           ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
 
-    # - name: Install Cosign
-    #   shell: bash
-    #   run: |
-    #     curl -sSfL https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 \
-    #     -o /usr/local/bin/cosign && chmod +x /usr/local/bin/cosign
-
-    # - name: Create and Attach Attestation
-    #   run: |
-    #     cosign attest \
-    #       --key ${{ secrets.COSIGN_KEY }} \
-    #       --predicate sbom.json \
-    #       --type https://spdx.dev/documents/ \
-    #       ${{ inputs.docker-registry }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
-
-
-
     - name: Docker Logout
       shell: bash
       run: |
