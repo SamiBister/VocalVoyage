@@ -38,9 +38,10 @@ jobs:
         # something like:
         #   echo "::set-output name=custom_version::$CUSTOM_VERSION"
 
-      - name: Print version from step
+      - name: Debug version output
         run: |
-          echo "Version from step: ${{ steps.set_version.outputs.custom_version }}"
+          echo "Version output debug: ${{ steps.set_version.outputs.custom_version }}"
+          echo "Step outputs: ${{ toJSON(steps.set_version.outputs) }}"
 
   publish-artifacts-backend:
     name: Publish Artifacts - Backend
@@ -58,6 +59,10 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Print version
+        run: |
+          echo "Version from determine-version job: ${{ needs.determine-version.outputs.custom_version }}"
+
+      - name: Print enb version
         run: |
           echo "Version from determine-version job: ${{ needs.determine-version.outputs.custom_version }}"
 
