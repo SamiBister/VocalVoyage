@@ -51,11 +51,11 @@ runs:
         git tag -a "${{ env.CUSTOM_VERSION }}" -m "Main version ${{ env.CUSTOM_VERSION }}"
         git push origin "${{ env.CUSTOM_VERSION }}"
 
-    # <<-- This step exposes the final environment variable as a named output.
-    - name: Expose CUSTOM_VERSION as action output
-      id: set_version
-      shell: bash
-      run: |
-        # $CUSTOM_VERSION is now in the environment (from previous steps that wrote to $GITHUB_ENV).
-        # We'll convert it into a step output so the entire composite action can expose it.
-        echo "custom_version=${{ env.CUSTOM_VERSION }}" >> $GITHUB_OUTPUT
+    # # <<-- This step exposes the final environment variable as a named output.
+    # - name: Expose CUSTOM_VERSION as action output
+    #   id: set_version
+    #   shell: bash
+    #   run: |
+    #     # $CUSTOM_VERSION is now in the environment (from previous steps that wrote to $GITHUB_ENV).
+    #     # We'll convert it into a step output so the entire composite action can expose it.
+    #     echo "custom_version=${{ env.CUSTOM_VERSION }}" >> $GITHUB_OUTPUT

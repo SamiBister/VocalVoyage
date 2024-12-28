@@ -22,8 +22,6 @@ jobs:
     name: Determine Version
     runs-on: ubuntu-latest
     # Expose the version as a job output
-    outputs:
-      custom_version: ${{ steps.set_version.outputs.custom_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,10 +36,12 @@ jobs:
         # something like:
         #   echo "::set-output name=custom_version::$CUSTOM_VERSION"
 
-      - name: Debug version output
+      - name: Set version output
+        id: set_version_output
         run: |
-          echo "Version output debug: ${{ steps.set_version.outputs.custom_version }}"
-          echo "Step outputs: ${{ toJSON(steps.set_version.outputs) }}"
+          echo "custom_version=${{ env.CUSTOM_VERSION }}" >> $GITHUB_OUTPUT
+    outputs:
+      custom_version: ${{ steps.set_version_output.outputs.custom_version }}
 
   publish-artifacts-backend:
     name: Publish Artifacts - Backend
