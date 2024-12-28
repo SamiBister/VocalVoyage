@@ -71,9 +71,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Install Cosign
-      uses: sigstore/cosign-installer@v3
-      with:
-        cosign-release: 'latest'
+      uses: sigstore/cosign-installer@v3.7.0
 
     - name: Attest SBOM (key-based)
       env:
