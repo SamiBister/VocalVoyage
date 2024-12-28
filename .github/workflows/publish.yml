@@ -64,7 +64,7 @@ jobs:
 
       - name: Print enb version
         run: |
-          echo "Version from determine-version job: ${{ needs.determine-version.outputs.custom_version }}"
+          printenv | sort
 
       - name: setup security
         uses: ./.github/actions/security_setup
