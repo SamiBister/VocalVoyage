@@ -73,6 +73,21 @@ runs:
     - name: Install Cosign
       uses: sigstore/cosign-installer@v3.7.0
 
+    - name: Install crane
+      shell: bash
+      run: |
+        curl -sSL https://github.com/google/go-containerregistry/releases/latest/download/crane_linux_amd64 \
+          -o /usr/local/bin/crane
+        chmod +x /usr/local/bin/crane
+
+    - name: Retrieve digest
+      id: digest
+      shell: bash
+      run: |
+        echo "digest=$(crane digest ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }})" >> $GITHUB_OUTPUT
+
+    
+
     - name: Attest SBOM (key-based)
       env:
         COSIGN_PASSWORD: ${{ inputs.cosign-password }}
@@ -86,12 +101,12 @@ runs:
             else
               echo "$COSIGN_KEY" > cosign.key
             fi
-
         # Attest the SBOM with the private key
         cosign attest \
           --predicate sbom.json \
           --key cosign.key \
-          ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
+          --yes \
+          ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}@${{ steps.digest.outputs.digest }}
 
     - name: Docker Logout
       shell: bash
