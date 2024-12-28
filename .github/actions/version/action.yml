@@ -58,4 +58,4 @@ runs:
       run: |
         # $CUSTOM_VERSION is now in the environment (from previous steps that wrote to $GITHUB_ENV).
         # We'll convert it into a step output so the entire composite action can expose it.
-        echo "custom_version=$CUSTOM_VERSION" >> $GITHUB_OUTPUT
+        echo "custom_version="${{ env.CUSTOM_VERSION }}" >> $GITHUB_OUTPUT
