@@ -80,7 +80,11 @@ runs:
       shell: bash
       run: |
         # Decode the private key from base64 (if stored as base64 in GitHub Secrets)
-        echo "$COSIGN_KEY" | base64 -d > cosign.key
+            if echo "$COSIGN_KEY" | base64 -d > cosign.key 2>/dev/null; then
+              echo "Successfully decoded base64 key"
+            else
+              echo "$COSIGN_KEY" > cosign.key
+            fi
 
         # Attest the SBOM with the private key
         cosign attest \
