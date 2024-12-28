@@ -42,7 +42,7 @@ runs:
     - name: Run Docker Build
       shell: bash
       run: |
-        docker buildx build --sbom=true --provenance=true -f ${{ inputs.dockerfile-path }} -t ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} .
+        docker build -f ${{ inputs.dockerfile-path }} -t ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} .
       working-directory: ${{ inputs.working-directory }}
 
     - name: Generaate SBOM with Syft
