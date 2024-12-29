@@ -1,5 +1,6 @@
-# Install uv
-FROM python:3.13-slim AS builder
+# python:3.13-slim
+ARG IMAGE=sha256:73b10ec18665ab5fb450c3118f76406ba3384f36af9bea43a55a482a8bf287a8 
+FROM $IMAGE AS builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Change the working directory to the `app` directory
@@ -13,7 +14,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-editable --no-dev
 
 
-FROM python:3.13-slim
+FROM $IMAGE as runner
 
 # Create app user
 RUN groupadd -r app && \

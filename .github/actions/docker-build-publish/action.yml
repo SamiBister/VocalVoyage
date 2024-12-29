@@ -42,13 +42,13 @@ runs:
     - name: Run Docker Build
       shell: bash
       run: |
-        docker build -f ${{ inputs.dockerfile-path }} -t ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} .
+        docker build -f ${{ inputs.dockerfile-path }} -t ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}-test .
       working-directory: ${{ inputs.working-directory }}
 
     - name: Generaate SBOM with Syft
       shell: bash
       run: |
-        syft ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }} -o json > sbom.json
+        syft ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}-test -o json > sbom.json
       working-directory: ${{ inputs.working-directory }}
 
     - name: Run Security Scan with Grype
@@ -64,49 +64,66 @@ runs:
       run: |
         echo "${{ inputs.docker-password }}" | docker login -u "${{ inputs.docker-user }}" --password-stdin "${{ inputs.docker-registry }}"
 
-    - name: Docker Push
-      shell: bash
-      run: |
-        docker push ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
-      working-directory: ${{ inputs.working-directory }}
+    # Docker hub does not recognize the attestations from other than Docker Build and publish step 
+    # - name: Docker Push
+    #   shell: bash
+    #   run: |
+    #     docker push ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
+    #   working-directory: ${{ inputs.working-directory }}
 
-    - name: Install Cosign
-      uses: sigstore/cosign-installer@v3.7.0
+    # Docker hub does not recognize the attestations from other than Docker Build and publish step 
+    # - name: Install Cosign
+    #   uses: sigstore/cosign-installer@v3.7.0
 
-    - name: Install crane
-      shell: bash
-      run: |
-        curl -sSL https://github.com/google/go-containerregistry/releases/latest/download/crane_linux_amd64 \
-          -o /usr/local/bin/crane
-        chmod +x /usr/local/bin/crane
+    # - name: Install crane
+    #   shell: bash
+    #   run: |
+    #     curl -sSL https://github.com/google/go-containerregistry/releases/latest/download/crane_linux_amd64 \
+    #       -o /usr/local/bin/crane
+    #     chmod +x /usr/local/bin/crane
 
-    - name: Retrieve digest
-      id: digest
-      shell: bash
-      run: |
-        echo "digest=$(crane digest ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }})" >> $GITHUB_OUTPUT
+    # Docker hub does not recognize the attestations from other than Docker Build and publish step
+    # - name: Retrieve digest
+    #   id: digest
+    #   shell: bash
+    #   run: |
+    #     echo "digest=$(crane digest ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }})" >> $GITHUB_OUTPUT
 
     
+    # Docker hub does not recognize the attestations from other than Docker Build and publish step
+    # - name: Attest SBOM (key-based)
+    #   env:
+    #     COSIGN_PASSWORD: ${{ inputs.cosign-password }}
+    #     COSIGN_KEY: ${{ inputs.cosign-key }}
+    #     COSIGN_SKIP_CONFIRM: "true"
+    #   shell: bash
+    #   run: |
+    #     # Decode the private key from base64 (if stored as base64 in GitHub Secrets)
+    #         if echo "$COSIGN_KEY" | base64 -d > cosign.key 2>/dev/null; then
+    #           echo "Successfully decoded base64 key"
+    #         else
+    #           echo "$COSIGN_KEY" > cosign.key
+    #         fi
+    #     # Attest the SBOM with the private key
+    #     cosign attest \
+    #       --predicate sbom.json \
+    #       --key cosign.key \
+    #       --yes \
+    #       ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
+    # - name: Extract metadata
+    #   id: meta
+    #   uses: docker/metadata-action@v5
+    #   with:
+    #     images: ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
 
-    - name: Attest SBOM (key-based)
-      env:
-        COSIGN_PASSWORD: ${{ inputs.cosign-password }}
-        COSIGN_KEY: ${{ inputs.cosign-key }}
-        COSIGN_SKIP_CONFIRM: "true"
-      shell: bash
-      run: |
-        # Decode the private key from base64 (if stored as base64 in GitHub Secrets)
-            if echo "$COSIGN_KEY" | base64 -d > cosign.key 2>/dev/null; then
-              echo "Successfully decoded base64 key"
-            else
-              echo "$COSIGN_KEY" > cosign.key
-            fi
-        # Attest the SBOM with the private key
-        cosign attest \
-          --predicate sbom.json \
-          --key cosign.key \
-          --yes \
-          ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
+    - name: Build and push image
+      uses: docker/build-push-action@v6
+      with:
+        context: ${{ inputs.working-directory }}
+        file: ${{ inputs.dockerfile-path }}
+        sbom: true
+        push: true
+        tags: ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
 
     - name: Docker Logout
       shell: bash

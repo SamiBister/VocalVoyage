@@ -1,5 +1,6 @@
 # Build stage
-FROM node:23-alpine AS builder
+ARG IMAGE=sha256:f2f8fc3620ff636de73129f9a3a20c5366ce96bbe08f41d54ed158196efa7a9c
+FROM $IMAGE AS builder
 
 WORKDIR /app
 
@@ -17,12 +18,9 @@ COPY frontend/ .
 RUN npm run build
 
 #Production stage
-FROM node:23-alpine AS runner
+FROM $IMAGE AS runner
 
 
-# # Create app user
-# RUN mkdir -p /app && \
-#     chown app:app /app
 
 WORKDIR /app
 
