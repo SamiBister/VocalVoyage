@@ -1,5 +1,5 @@
 # Build stage
-ARG IMAGE=sha256:f2f8fc3620ff636de73129f9a3a20c5366ce96bbe08f41d54ed158196efa7a9c
+ARG IMAGE=node:23-alpine
 FROM $IMAGE AS builder
 
 WORKDIR /app

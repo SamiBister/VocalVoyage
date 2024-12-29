@@ -1,5 +1,5 @@
 # python:3.13-slim
-ARG IMAGE=sha256:73b10ec18665ab5fb450c3118f76406ba3384f36af9bea43a55a482a8bf287a8 
+ARG IMAGE=python:3.13-slim
 FROM $IMAGE AS builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
