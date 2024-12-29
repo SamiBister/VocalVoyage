@@ -20,7 +20,12 @@ RUN npm run build
 #Production stage
 FROM $IMAGE AS runner
 
-
+LABEL org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.title="VocabVoyage YU"
+LABEL org.opencontainers.image.description="VocabVoyage UI"
+LABEL org.opencontainers.image.source="https://github.com/SamiBister/VocabVoyage"
+LABEL org.opencontainers.image.licenses="Apache-2.0"
+LABEL org.opencontainers.image.authors="Sami Bister"
 
 WORKDIR /app
 

@@ -121,6 +121,8 @@ runs:
       with:
         context: ${{ inputs.working-directory }}
         file: ${{ inputs.dockerfile-path }}
+        build-args: |
+          VERSION=${{ inputs.docker-tag }}
         sbom: true
         push: true
         tags: ${{ inputs.docker-registry }}/${{ inputs.docker-repository }}/${{ inputs.docker-image-name }}:${{ inputs.docker-tag }}
