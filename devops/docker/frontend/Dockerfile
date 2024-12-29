@@ -1,6 +1,6 @@
 # Build stage
-ARG IMAGE=node:23-alpine
-FROM $IMAGE AS builder
+ARG NODE_VERSION=23-slim
+FROM node:$NODE_VERSION AS builder
 
 WORKDIR /app
 
@@ -14,11 +14,12 @@ RUN npm ci
 # Copy source files
 COPY frontend/ .
 
-# Build application
+# Build application with specific environment
+ENV NODE_ENV=production
 RUN npm run build
 
 #Production stage
-FROM $IMAGE AS runner
+FROM node:$NODE_VERSION AS runner
 
 LABEL org.opencontainers.image.version="${VERSION}"
 LABEL org.opencontainers.image.title="VocabVoyage YU"
@@ -36,12 +37,12 @@ COPY  --chown=node:node --from=builder /app/package.json ./package.json
 COPY  --chown=node:node --from=builder /app/.env.local ./.env.local
 COPY  --chown=node:node --from=builder /app/node_modules ./node_modules
 
-
-
 EXPOSE 3000
 # Set production environment
-ENV NODE_ENV=production
-ENV NEXT_PUBLIC_API_URL=/api
+ENV NODE_ENV=production \
+    NEXT_PUBLIC_API_URL=/api \
+    PORT=3000 \
+    NEXT_TELEMETRY_DISABLED=1
 
 USER node
 
