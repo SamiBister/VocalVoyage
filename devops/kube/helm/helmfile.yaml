@@ -1,0 +1,30 @@
+# helm/helmfile.yaml
+---
+# (Optional) repositories section for external charts, if you need them.
+repositories:
+  - name: traefik
+    url: https://traefik.github.io/charts
+
+releases:
+  # 1. Traefik
+  - name: traefik
+    namespace: traefik
+    chart: ./traefik # Path to the local chart
+    # If your local Traefik chart depends on an external chart,
+    # define the repository or handle it in Chart.yaml
+    values:
+      - traefik-values.yaml # Optional extra values file
+
+  # 2. Backend
+  - name: vocabvoyage-backend
+    namespace: vocabvoyage
+    chart: ./backend
+    values:
+      - backend-values.yaml
+
+  # 3. Frontend
+  - name: vocabvoyage-frontend
+    namespace: vocabvoyage
+    chart: ./frontend
+    values:
+      - frontend-values.yaml

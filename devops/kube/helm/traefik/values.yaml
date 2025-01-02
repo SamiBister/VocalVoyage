@@ -1,0 +1,15 @@
+# Default values for the Traefik chart
+# Minimal example, but you can add more custom configs.
+
+image:
+  repository: traefik
+  tag: "v2.10"
+
+replicaCount: 1
+
+service:
+  type: NodePort
+  ports:
+    http: 80
+    admin: 8080
+# You can add any additional Traefik configuration, e.g., logs, middlewares, etc.

@@ -1,0 +1,14 @@
+apiVersion: k3d.io/v1alpha4
+kind: Simple
+metadata:
+  name: vocabvoyage
+servers: 1
+agents: 0
+ports:
+  - port: 80:80 # Expose HTTP port on localhost
+    nodeFilters:
+      - loadbalancer
+options:
+  k3s:
+    extraArgs:
+      - "--disable=traefik" # Disable the default Traefik

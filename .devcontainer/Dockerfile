@@ -1,6 +1,10 @@
 # Starting from the MCR dev container image for Node.js (Node 18).
 FROM mcr.microsoft.com/devcontainers/typescript-node
 
+
+# Set the Helmfile version
+ARG HELMFILE_VERSION=v0.169.2
+
 # [Optional] Install additional OS packages if needed
 # Install required tools and dependencies
 RUN apt-get update && apt-get install -y \
@@ -11,7 +15,27 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     tmux \
     fzf \
+    apt-transport-https \
+    gnupg2 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install kubectl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    chmod +x kubectl && \
+    mv kubectl /usr/local/bin/
+
+# Install Helm
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# Install k3d
+RUN wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+
+# Download and install Helmfile
+RUN curl -sSL "https://github.com/helmfile/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION#v}_linux_amd64.tar.gz" \
+    -o /tmp/helmfile.tar.gz \
+    && tar -xzf /tmp/helmfile.tar.gz -C /usr/local/bin \
+    && rm /tmp/helmfile.tar.gz
+
 # # Download Neovim based on platform
 RUN curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-linux64.tar.gz && \
     tar xzvf nvim-linux64.tar.gz && \

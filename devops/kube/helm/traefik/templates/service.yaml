@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik
+spec:
+  type: { { .Values.service.type } }
+  selector:
+    app: traefik
+  ports:
+    - name: web
+      port: { { .Values.service.ports.http } }
+      targetPort: 80
+    - name: admin
+      port: { { .Values.service.ports.admin } }
+      targetPort: 8080

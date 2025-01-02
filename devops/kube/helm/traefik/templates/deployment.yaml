@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik
+spec:
+  replicas: { { .Values.replicaCount } }
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      containers:
+        - name: traefik
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          args:
+            - "--api.insecure=true"
+            - "--providers.kubernetescrd"
+            - "--providers.kubernetesingress"
+            - "--entryPoints.web.address=:80"
+            - "--entryPoints.websecure.address=:443"
+          ports:
+            - name: web
+              containerPort: 80
+            - name: admin
+              containerPort: 8080

@@ -1,0 +1,15 @@
+image:
+  repository: samibister/vocabvoyage-backend
+  tag: "0.7.29"
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  host: vocabvoyage.local
+  path: /api

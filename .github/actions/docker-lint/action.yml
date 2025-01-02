@@ -1,0 +1,25 @@
+name: "Hadolint Composite Action"
+description: "A composite action to run Hadolint for Dockerfile linting"
+inputs:
+  dockerfile:
+    description: "Path to the Dockerfile to be linted"
+    required: true
+    default: "./Dockerfile"
+  working-directory:
+    description: "Working directory where Hadolint will be executed"
+    required: false
+    default: "."
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Hadolint
+      run: |
+        wget -O /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+        chmod +x /usr/local/bin/hadolint
+      shell: bash
+
+    - name: Lint Dockerfile
+      run: |
+        hadolint "${{ inputs.dockerfile }}"
+      working-directory: ${{ inputs.working-directory }}
+      shell: bash

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: vocabvoyage-frontend
+description: Helm chart for the VocabVoyage frontend
+version: 0.1.0
+appVersion: "0.7.29"

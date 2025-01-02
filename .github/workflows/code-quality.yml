@@ -36,3 +36,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - run: uv run pyright .
+
+  docker-lint-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker lint backend
+        uses: ./.github/actions/docker-lint
+        with:
+          working-directory: "."
+          dockerfile: "devops/docker/backend/Dockerfile"
+
+  docker-lint-ftontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker lint backend
+        uses: ./.github/actions/docker-lint
+        with:
+          working-directory: "."
+          dockerfile: "devops/docker/frontend/Dockerfile"
